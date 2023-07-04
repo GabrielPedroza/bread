@@ -83,28 +83,28 @@ User Persona 2: Attendee Mark Johnson
 
 <a href="https://excalidraw.com/#json=zcuSgC2kLxqb7DFdisPmQ,b7E35qNB1c97fegp52vinA">Wireframe URL</a>
 <p align="center">
-    <img src="wireframe.png" alt="wireframe" width="600" />
+    <img src="/public/wireframe.png" alt="wireframe" width="600" />
 </p>
 
 ## Data Modal
 
 <p align="center">
-    <img src="account_data_modal.png" alt="account data modal" width="600" />
+    <img src="/public/account_data_modal.png" alt="account data modal" width="600" />
 </p>
 <p align="center">
-    <img src="session_data_modal.png" alt="session data modal" width="600" />
+    <img src="/public/session_data_modal.png" alt="session data modal" width="600" />
 </p>
 <p align="center">
-    <img src="user_and_verificationToken_data_modal.png" alt="user and verificationToken data modal" width="600" />
+    <img src="/public/user_and_verificationToken_data_modal.png" alt="user and verificationToken data modal" width="600" />
 </p>
 <p align="center">
-    <img src="automation_data_modal.png" alt="automation data modal" width="600" />
+    <img src="/public/automation_data_modal.png" alt="automation data modal" width="600" />
 </p>
 
 ## API Endpoints
 
 <p align="center">
-    <img src="api_routes.png" alt="api endpoints" width="600" />
+    <img src="/public/api_routes.png" alt="api endpoints" width="600" />
 </p>
 
 ## Limitations
