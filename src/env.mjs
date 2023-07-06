@@ -21,6 +21,11 @@ export const env = createEnv({
       process.env.VERCEL ? z.string().min(1) : z.string().url(),
     ),
     // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
+    GITHUB_CLIENT: z.string().min(1),
+    GITHUB_SECRET: z.string().min(1),
+    GOOGLE_CLIENT: z.string().min(1),
+    GOOGLE_SECRET: z.string().min(1),
+    JWT_SECRET: z.string().min(1)
   },
 
   /**
@@ -41,6 +46,11 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    GITHUB_CLIENT: process.env.GITHUB_CLIENT,
+    GITHUB_SECRET: process.env.GITHUB_SECRET,
+    GOOGLE_CLIENT: process.env.GOOGLE_CLIENT,
+    GOOGLE_SECRET: process.env.GOOGLE_SECRET,
+    JWT_SECRET: process.env.JWT_SECRET
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
