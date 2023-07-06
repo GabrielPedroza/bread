@@ -1,5 +1,5 @@
 import { getSession, signIn } from 'next-auth/react'
-import { GetServerSideProps } from 'next';
+import { type GetServerSideProps } from 'next';
 import Link from 'next/link';
 
 const Login = () => {

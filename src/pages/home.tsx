@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next'
+import { type GetServerSideProps } from 'next'
 import { getSession, signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 
@@ -9,7 +9,7 @@ const Home = () => {
     <>
         <div>Home</div>
         <Link href={'/'}>landing</Link>
-        <button onClick={() => signOut()}>logout</button>
+        <button onClick={() => void signOut()}>logout</button>
         {session ? <p>{session.user.email ?? session.user.name}</p> : <p>no user</p>}
     </>
   )
