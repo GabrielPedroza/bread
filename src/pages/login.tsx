@@ -5,15 +5,24 @@ import Link from 'next/link';
 const Login = () => {
 
   return (
-    <>
-      <div>Login</div>
-      <Link href={'/'}>go to landing page</Link>
-      <br />
-      <button onClick={() => void signIn('github')}>sign in with github</button>
-      <br />
-      <button onClick={() => void signIn('google')}>sign in with google</button>
-      <br />
-    </>
+      <div className="flex flex-col items-center justify-center h-screen">
+      <div className="text-4xl mb-8">Login</div>
+      <Link href="/" className="mb-4 text-blue-500 underline">
+        Go to landing page
+      </Link>
+      <button
+        className="px-4 py-2 mb-4 text-white bg-black rounded hover:bg-gray-800"
+        onClick={() => void signIn('github')}
+      >
+        Sign in with GitHub
+      </button>
+      <button
+        className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700"
+        onClick={() => void signIn('google')}
+      >
+        Sign in with Google
+      </button>
+    </div>
   )
 }
 
