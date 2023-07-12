@@ -1,6 +1,6 @@
-import { MouseEvent, useContext } from "react"
+import { type MouseEvent, useContext } from "react"
 import { z } from "zod";
-import { ModalContext, ModalContextType } from "~/state/ModalContext"
+import { ModalContext, type ModalContextType } from "~/state/ModalContext"
 
 const eventTypeSchema = z.array(z.object({
   id: z.number(),

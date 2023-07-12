@@ -1,21 +1,28 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { Octokit } from '@octokit/rest';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function webhooksHandler(
+interface IssuePayload {
+  issue: {
+    html_url: string;
+    title: string;
+  };
+  repository: {
+    name: string;
+  };
+}
+
+export default function webhooksHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method === 'POST') {
-    const octokit = new Octokit();
-
     const eventType = req.headers['x-github-event'];
     if (eventType !== 'issues') {
-      console.log(`Webhook ignored. Unsupported event type: ${eventType}`);
+      console.log(`Webhook ignored. Unsupported event type: ${eventType as string}`);
       res.status(200).send('Webhook ignored');
       return;
     }
 
-    const payload = req.body;
+    const payload = req.body as IssuePayload;
     const issueTitle = payload.issue.title;
     const repositoryName = payload.repository.name;
     const issueUrl = payload.issue.html_url;
@@ -29,3 +36,4 @@ export default async function webhooksHandler(
     res.status(405).send('Method Not Allowed');
   }
 }
+
