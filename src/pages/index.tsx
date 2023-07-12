@@ -13,9 +13,13 @@ export default function Home() {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Navbar />
-			<h1>Bread</h1>
-			<h3>An Automation Tool</h3>
-			<h3>For Engineers</h3>
+      <div className="flex justify-center align-middle flex-col text-center mt-10">
+        <h1 className="text-7xl">Bread</h1>
+        <div className="flex justify-center align-middle flex-col">
+          <h3>An Automation Tool</h3>
+          <h3>For Engineers</h3>
+        </div>
+      </div>
 		</>
 	);
 }

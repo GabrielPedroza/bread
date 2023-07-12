@@ -1,17 +1,19 @@
 import { type GetServerSideProps } from 'next'
-import { getSession, signOut, useSession } from 'next-auth/react'
-import Link from 'next/link'
+import { getSession } from 'next-auth/react'
+import RecommendedAutomations from '~/components/RecommendedAutomations'
+import Sidebar from '~/components/Sidebar'
+import UserAutomations from '~/components/UserAutomations'
 
 const Home = () => {
-  const { data: session } = useSession()
 
   return (
-    <>
-        <div>Home</div>
-        <Link href={'/'}>landing</Link>
-        <button onClick={() => void signOut()}>logout</button>
-        {session ? <p>{session.user.email ?? session.user.name}</p> : <p>no user</p>}
-    </>
+    <div className='flex border-4 border-green-300 h-screen w-screen'>
+        <Sidebar />
+        <div className='flex flex-col w-screen h-screen justify-center'>
+          <RecommendedAutomations />
+          <UserAutomations />
+        </div>
+    </div>
   )
 }
 
