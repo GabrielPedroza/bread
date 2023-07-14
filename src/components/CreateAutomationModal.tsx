@@ -1,30 +1,34 @@
 import { type MouseEvent, useContext } from "react"
-import { z } from "zod";
-import { ModalContext, type ModalContextType } from "~/state/ModalContext"
+import { ModalContext } from "~/state/ModalContext"
 
-const eventTypeSchema = z.array(z.object({
-  id: z.number(),
-  name: z.enum(['Calendar', 'Mail', 'GitHub', '']),
-  description: z.string()
-}))
+enum EventName {
+  Mail = 'mail',
+  GitHub = 'github',
+  Calendar = 'calendar'
+}
 
-type eventTypes = z.infer<typeof eventTypeSchema>
+type eventType = {
+  id: number;
+  name: EventName;
+  description: string;
+}
+
+type eventTypes = eventType[]
 
 const CreateAutomationModal = () => {
   
-  const { setCreateModalOpened, setRulesetModalOpened, setEventTrigger } = useContext(ModalContext)
+  const { setCreateModalState, setRulesetModalState, setEventTriggerState } = useContext(ModalContext)
   
   const eventTypes: eventTypes = [
-    { id: 1, name: 'Mail', description: 'Example: When an email was receieved...' },
-    { id: 2, name: 'GitHub', description: 'Example: When a PR has been merged to a repository...' },
-    { id: 3, name: 'Calendar', description: 'Example: When a meeting is canceled...' },
+    { id: 1, name: EventName.Mail, description: 'Example: When an email was receieved...' },
+    { id: 2, name: EventName.GitHub, description: 'Example: When a PR has been merged to a repository...' },
+    { id: 3, name: EventName.Calendar, description: 'Example: When a meeting is canceled...' },
     // event types
   ];
   
-  const handleClickedAutomation = (e: MouseEvent<HTMLDivElement>, eventType: eventTypes[0]["name"]) => {
-    const eventTrigger = eventType.toLowerCase() as ModalContextType["eventTrigger"]
-    setEventTrigger(eventTrigger)
-    setRulesetModalOpened(true)
+  const handleClickedAutomation = (e: MouseEvent<HTMLDivElement>, eventType: eventType["name"]) => {
+    setEventTriggerState(eventType)
+    setRulesetModalState({ open: true })
   }
 
   return (
@@ -33,11 +37,11 @@ const CreateAutomationModal = () => {
         <p>
           Create Modal
         </p>
-        <button className="absolute right-4 top-4 text-3xl p-4" aria-label="Close Create Modal" type="button" onClick={() => setCreateModalOpened(false)}>X</button>
+        <button className="absolute right-4 top-4 text-3xl p-4" aria-label="Close Create Modal" type="button" onClick={() => setCreateModalState({ open: false })}>X</button>
         <div className="flex flex-col gap-4 p-4 mt-10">
           {eventTypes.map((eventType) => (
             <div key={eventType.id} className="border-2 p-4 cursor-pointer" onClick={(e) => handleClickedAutomation(e, eventType.name)}>
-              <h3 className="text-xl font-bold">{eventType.name}</h3>
+              <h3 className="text-xl font-bold capitalize">{eventType.name}</h3>
               <p>{eventType.description}</p>
             </div>
           ))}
