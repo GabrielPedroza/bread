@@ -1,24 +1,28 @@
 import { createContext, useState } from "react";
-import { z } from "zod";
 
-const ModalContextSchema = z.object({
-  eventTrigger: z.enum(["mail", "calendar", "github", ""]),
-  createModalOpened: z.boolean(),
-  rulesetModalOpened: z.boolean(),
-  setCreateModalOpened: z.function(z.tuple([z.boolean()])).returns(z.void()),
-  setRulesetModalOpened: z.function(z.tuple([z.boolean()])).returns(z.void()),
-  setEventTrigger: z.function(z.tuple([z.enum(["mail", "calendar", "github", ""])])).returns(z.void())
-});
+type eventTriggerType = "mail" | "calendar" | "github" | "" 
 
-export type ModalContextType = z.infer<typeof ModalContextSchema>;
+type ModalContextType = {
+  eventTriggerState: eventTriggerType;
+  createModalState: {
+    open: boolean;
+  };
+  rulesetModalState: {
+    open: boolean;
+  };
+  setCreateModalState: (value: { open: boolean }) => void;
+  setRulesetModalState: (value: { open: boolean }) => void;
+  setEventTriggerState: (value: eventTriggerType) => void;
+};
+
 
 const InitialModalContext: ModalContextType = {
-  eventTrigger: "",
-  createModalOpened: false,
-  rulesetModalOpened: false,
-  setCreateModalOpened: () => {},
-  setRulesetModalOpened: () => {},
-  setEventTrigger: () => {}
+  eventTriggerState: "",
+  createModalState: { open: false },
+  rulesetModalState: { open: false },
+  setCreateModalState: () => {},
+  setRulesetModalState: () => {},
+  setEventTriggerState: () => {}
 };
 
 export const ModalContext = createContext<ModalContextType>(InitialModalContext);
@@ -28,20 +32,29 @@ type ModalProviderProps = {
 };
 
 export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
-  const [createModalOpened, setCreateModalOpened] = useState<boolean>(false);
-  const [eventTrigger, setEventTrigger] = useState<ModalContextType["eventTrigger"]>("");
-  const [rulesetModalOpened, setRulesetModalOpened] = useState<boolean>(false);
+  const [createModalState, setCreateModalState] = useState<{ open: boolean }>({ open: false });
+  const [eventTriggerState, setEventTriggerState] = useState<ModalContextType['eventTriggerState']>('');
+  const [rulesetModalState, setRulesetModalState] = useState<{ open: boolean }>({ open: false });
+
+  const handleSetCreateModalState = ({ open }: { open: boolean }) => {
+    setCreateModalState({ open });
+    if (open === false) {
+      setEventTriggerState('');
+    }
+  };
 
   const contextValues: ModalContextType = {
-    eventTrigger,
-    createModalOpened,
-    rulesetModalOpened,
-    setCreateModalOpened: (value: boolean) => setCreateModalOpened(value),
-    setRulesetModalOpened: (value: boolean) => setRulesetModalOpened(value),
-    setEventTrigger: (value: ModalContextType["eventTrigger"]) => setEventTrigger(value)
+    eventTriggerState: eventTriggerState,
+    createModalState: createModalState,
+    rulesetModalState: rulesetModalState,
+    setCreateModalState: handleSetCreateModalState,
+    setRulesetModalState: ({ open }) => setRulesetModalState({ open }),
+    setEventTriggerState: (value) => setEventTriggerState(value),
   };
 
   return (
     <ModalContext.Provider value={contextValues}>{children}</ModalContext.Provider>
   );
 };
+
+
