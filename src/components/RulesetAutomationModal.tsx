@@ -3,12 +3,11 @@ import { ModalContext } from "~/state/ModalContext";
 import FormType from "./FormType";
 
 const RulesetAutomationModal = () => {
-  const { setCreateModalOpened, setRulesetModalOpened, setEventTrigger } = useContext(ModalContext);
+  const { setCreateModalState, setRulesetModalState } = useContext(ModalContext);
 
   const handleClose = () => {
-    setCreateModalOpened(false)
-    setRulesetModalOpened(false)
-    setEventTrigger("") // not neccessary but nice to know state is always up-to-date
+    setCreateModalState({ open: false })
+    setRulesetModalState({ open: false })
   }
 
   return (
@@ -21,7 +20,7 @@ const RulesetAutomationModal = () => {
           className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
           type="button"
           aria-label="Go Back to Create Automation Modal"
-          onClick={() => setRulesetModalOpened(false)}
+          onClick={() => setRulesetModalState({ open: false })}
         >
           Go Back
         </button>
