@@ -1,20 +1,24 @@
 import { useContext } from "react"
 import { ModalContext } from "~/state/ModalContext"
 
-type ModalStateSetter = (args_0: boolean) => void
+type ModalStateSetter = (value: { open: boolean }) => void
 
 interface GitHubFormTypeProps {
-  modals: [ModalStateSetter, ModalStateSetter];
+  modals: {
+    setCreateModalState: ModalStateSetter
+    setRulesetModalState: ModalStateSetter
+  }
 }
 
 const FormType = () => {
-  const { eventTrigger, setRulesetModalOpened, setCreateModalOpened } = useContext(ModalContext);
+  
+  const { eventTriggerState, setRulesetModalState, setCreateModalState } = useContext(ModalContext);
 
   return (
     <div>
-      {eventTrigger === "mail" && <MailFormType />}
-      {eventTrigger === "calendar" && <CalendarFormType />}
-      {eventTrigger === "github" && <GitHubFormType modals={[setCreateModalOpened, setRulesetModalOpened]} />}
+      {eventTriggerState === "mail" && <MailFormType />}
+      {eventTriggerState === "calendar" && <CalendarFormType />}
+      {eventTriggerState === "github" && <GitHubFormType modals={{ setCreateModalState, setRulesetModalState }} />}
     </div>
   );
 };
@@ -33,16 +37,15 @@ const CalendarFormType = () => (
 )
 const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
 
-  const [C, RS] = modals
+  const { setCreateModalState, setRulesetModalState } = modals
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // create automation and webhook logic func calls here
     // show some UI if worked for failed
 
-    // close modals
-    C(false)
-    RS(false)
+    setCreateModalState({ open: false })
+    setRulesetModalState({ open: false })
   }
 
   return (
