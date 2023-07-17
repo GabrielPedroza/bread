@@ -1,5 +1,6 @@
 import { useContext } from "react"
 import { ModalContext } from "~/state/ModalContext"
+import { api } from "~/utils/api"
 
 type ModalStateSetter = (value: { open: boolean }) => void
 
@@ -38,11 +39,13 @@ const CalendarFormType = () => (
 const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
 
   const { setCreateModalState, setRulesetModalState } = modals
+  const result = api.webhook.createWebhook.useMutation()
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // create automation and webhook logic func calls here
     // show some UI if worked for failed
+    console.log(result.mutate());
 
     setCreateModalState({ open: false })
     setRulesetModalState({ open: false })
