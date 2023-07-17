@@ -1,20 +1,28 @@
 import { createContext, useState } from "react";
-import { z } from "zod";
 
-const ModalContextSchema = z.object({
-  createModalOpened: z.boolean(),
-  rulesetModalOpened: z.boolean(),
-  setCreateModalOpened: z.function(z.tuple([z.boolean()])).returns(z.void()),
-  setRulesetModalOpened: z.function(z.tuple([z.boolean()])).returns(z.void())
-});
+type eventTriggerType = "mail" | "calendar" | "github" | "" 
 
-type ModalContextType = z.infer<typeof ModalContextSchema>;
+type ModalContextType = {
+  eventTriggerState: eventTriggerType;
+  createModalState: {
+    open: boolean;
+  };
+  rulesetModalState: {
+    open: boolean;
+  };
+  setCreateModalState: (value: { open: boolean }) => void;
+  setRulesetModalState: (value: { open: boolean }) => void;
+  setEventTriggerState: (value: eventTriggerType) => void;
+};
+
 
 const InitialModalContext: ModalContextType = {
-  createModalOpened: false,
-  rulesetModalOpened: false,
-  setCreateModalOpened: () => {},
-  setRulesetModalOpened: () => {}
+  eventTriggerState: "",
+  createModalState: { open: false },
+  rulesetModalState: { open: false },
+  setCreateModalState: () => {},
+  setRulesetModalState: () => {},
+  setEventTriggerState: () => {}
 };
 
 export const ModalContext = createContext<ModalContextType>(InitialModalContext);
@@ -24,17 +32,29 @@ type ModalProviderProps = {
 };
 
 export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
-  const [createModalOpened, setCreateModalOpened] = useState<boolean>(false);
-  const [rulesetModalOpened, setRulesetModalOpened] = useState<boolean>(false);
+  const [createModalState, setCreateModalState] = useState<{ open: boolean }>({ open: false });
+  const [eventTriggerState, setEventTriggerState] = useState<ModalContextType['eventTriggerState']>('');
+  const [rulesetModalState, setRulesetModalState] = useState<{ open: boolean }>({ open: false });
+
+  const handleSetCreateModalState = ({ open }: { open: boolean }) => {
+    setCreateModalState({ open });
+    if (open === false) {
+      setEventTriggerState('');
+    }
+  };
 
   const contextValues: ModalContextType = {
-    createModalOpened,
-    rulesetModalOpened,
-    setCreateModalOpened: (value: boolean) => setCreateModalOpened(value),
-    setRulesetModalOpened: (value: boolean) => setRulesetModalOpened(value)
+    eventTriggerState: eventTriggerState,
+    createModalState: createModalState,
+    rulesetModalState: rulesetModalState,
+    setCreateModalState: handleSetCreateModalState,
+    setRulesetModalState: ({ open }) => setRulesetModalState({ open }),
+    setEventTriggerState: (value) => setEventTriggerState(value),
   };
 
   return (
     <ModalContext.Provider value={contextValues}>{children}</ModalContext.Provider>
   );
 };
+
+

@@ -7,17 +7,17 @@ import RulesetAutomationModal from "./RulesetAutomationModal"
 
 const Sidebar = () => {
 
-  const { createModalOpened, rulesetModalOpened , setCreateModalOpened } = useContext(ModalContext)
+  const { createModalState, rulesetModalState, setCreateModalState } = useContext(ModalContext)
 
   return (
     <div className="w-[300px] border-4 border-purple-400 h-full">
       <Link href={'/'}>Bread</Link>
       <br />
       <button onClick={() => {
-        setCreateModalOpened(true)
+        setCreateModalState({ open: true })
       }} className="bg-green-400 px-5 py-3 text-white rounded-md my-5">Create</button>
-      { createModalOpened && <CreateAutomationModal /> }
-      { rulesetModalOpened && <RulesetAutomationModal /> }
+      { createModalState.open && <CreateAutomationModal /> }
+      { rulesetModalState.open && <RulesetAutomationModal /> }
       <div>Sidebar</div>
       <button onClick={() => void signOut()}>logout</button>
     </div>
