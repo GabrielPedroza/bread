@@ -45,7 +45,7 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
     e.preventDefault()
     // create automation and webhook logic func calls here
     // show some UI if worked for failed
-    console.log(result.mutate());
+    result.mutate()
 
     setCreateModalState({ open: false })
     setRulesetModalState({ open: false })
