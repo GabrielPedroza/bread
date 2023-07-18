@@ -1,17 +1,16 @@
 import { Octokit } from "@octokit/rest";
+import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const webhookRouter = createTRPCRouter({
-  createWebhook: protectedProcedure.mutation(async () => {
+  createWebhook: protectedProcedure.input(z.object({ accessToken: z.string()})).mutation(async ({ input }) => {
     const owner = "GabrielPedroza";
     const repo = "e-commerce";
 
     const WEBHOOK_URL = "https://bread-meta.vercel.app/api/webhooks/webhook";
-
-    // create your own auth code here: https://github.com/settings/tokens/new?scopes=repo
     
     const octokit = new Octokit({
-      auth: process.env.TEST_AUTH
+      auth: input.accessToken
     })
 
     try {

@@ -1,3 +1,4 @@
+import { useSession } from "next-auth/react"
 import { useContext } from "react"
 import { ModalContext } from "~/state/ModalContext"
 import { api } from "~/utils/api"
@@ -39,13 +40,14 @@ const CalendarFormType = () => (
 const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
 
   const { setCreateModalState, setRulesetModalState } = modals
+  const { data: session } = useSession()
   const result = api.webhook.createWebhook.useMutation()
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // create automation and webhook logic func calls here
     // show some UI if worked for failed
-    result.mutate()
+    result.mutate({ accessToken: session?.user.accessToken! })
 
     setCreateModalState({ open: false })
     setRulesetModalState({ open: false })

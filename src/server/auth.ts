@@ -6,6 +6,7 @@ import {
   getServerSession,
   type NextAuthOptions,
   type DefaultSession,
+  User,
 } from "next-auth";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
@@ -20,16 +21,26 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      accessToken: string;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    accessToken: string;
+    // ...other properties
+    // role: UserRole;
+  }
 }
+
+interface UserWithAccessToken extends User {
+  tokens: {
+    access_token: string;
+  };
+}
+
+let profileWithAccessToken: UserWithAccessToken;
 
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -38,19 +49,33 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: async ({ session, user }) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user.id,
+          accessToken: profileWithAccessToken?.tokens.access_token,
+        },
+      };
+    },
   },
   adapter: PrismaAdapter(prisma),
   providers: [
     GitHubProvider({
       clientId: env.GITHUB_CLIENT,
       clientSecret: env.GITHUB_SECRET,
+      authorization: {
+        params: {
+          scope: "repo"
+        }
+      },
+      profile: (profile, tokens) => {
+        if (tokens) {
+          profileWithAccessToken = { ...profile, tokens }
+        }
+        return profileWithAccessToken;
+      },
     }),
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT,
