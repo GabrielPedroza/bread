@@ -88,7 +88,7 @@ User Persona 2: Attendee Mark Johnson
     <img src="/public/wireframe.png" alt="wireframe" width="600" />
 </p>
 
-## Data Modal
+## Data Model
 
 <p align="center">
     <img src="/public/account_data_modal.png" alt="account data modal" width="600" />
