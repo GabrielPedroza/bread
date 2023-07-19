@@ -41,13 +41,16 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
 
   const { setCreateModalState, setRulesetModalState } = modals
   const { data: session } = useSession()
+  
+  // show some ui error handling
   const result = api.webhook.createWebhook.useMutation()
   
   const handleSubmit = (e: React.FormEvent) => {
+    if (!session) return "log out and log back in"
     e.preventDefault()
     // create automation and webhook logic func calls here
     // show some UI if worked for failed
-    result.mutate({ accessToken: session?.user.accessToken! })
+    result.mutate({ accessToken: session.user.accessToken })
 
     setCreateModalState({ open: false })
     setRulesetModalState({ open: false })

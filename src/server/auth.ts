@@ -6,7 +6,7 @@ import {
   getServerSession,
   type NextAuthOptions,
   type DefaultSession,
-  User,
+  type User,
 } from "next-auth";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
@@ -49,7 +49,7 @@ let profileWithAccessToken: UserWithAccessToken;
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: async ({ session, user }) => {
+    session: ({ session, user }) => {
       return {
         ...session,
         user: {
@@ -72,6 +72,7 @@ export const authOptions: NextAuthOptions = {
       },
       profile: (profile, tokens) => {
         if (tokens) {
+          /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
           profileWithAccessToken = { ...profile, tokens }
         }
         return profileWithAccessToken;
