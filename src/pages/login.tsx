@@ -12,13 +12,19 @@ const Login = () => {
       </Link>
       <button
         className="px-4 py-2 mb-4 text-white bg-black rounded hover:bg-gray-800"
-        onClick={() => void signIn('github')}
+        onClick={() => {
+          {/* eslint-disable-next-line @typescript-eslint/no-floating-promises */}
+          signIn('github')
+        }}
       >
         Sign in with GitHub
       </button>
       <button
         className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700"
-        onClick={() => void signIn('google')}
+        onClick={() => {
+          {/* eslint-disable-next-line @typescript-eslint/no-floating-promises */}
+          signIn('google')}
+        }
       >
         Sign in with Google
       </button>
