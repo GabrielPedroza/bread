@@ -25,7 +25,8 @@ export const env = createEnv({
     GITHUB_SECRET: z.string().min(1),
     GOOGLE_CLIENT: z.string().min(1),
     GOOGLE_SECRET: z.string().min(1),
-    JWT_SECRET: z.string().min(1)
+    JWT_SECRET: z.string().min(1),
+    WEBHOOK_SECRET: z.string().min(1) // make webhooks secure
   },
 
   /**
@@ -50,7 +51,8 @@ export const env = createEnv({
     GITHUB_SECRET: process.env.GITHUB_SECRET,
     GOOGLE_CLIENT: process.env.GOOGLE_CLIENT,
     GOOGLE_SECRET: process.env.GOOGLE_SECRET,
-    JWT_SECRET: process.env.JWT_SECRET
+    JWT_SECRET: process.env.JWT_SECRET,
+    WEBHOOK_SECRET: process.env.WEBHOOK_SECRET
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

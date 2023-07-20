@@ -1,4 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import * as crypto from "crypto";
+import { env } from '~/env.mjs';
 
 interface IssuePayload {
   issue: {
@@ -14,14 +16,20 @@ export default function webhooksHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === 'POST') {
-    const eventType = req.headers['x-github-event'];
-    if (eventType !== 'issues') {
-      console.log(`Webhook ignored. Unsupported event type: ${eventType as string}`);
-      res.status(200).send('Webhook ignored');
-      return;
-    }
+  const verify_signature = (req: NextApiRequest) => {
+    const signature = crypto
+      .createHmac("sha256", env.WEBHOOK_SECRET)
+      .update(JSON.stringify(req.body))
+      .digest("hex");
+    return `sha256=${signature}` === req.headers["x-hub-signature-256"];
+  };
 
+  if (!verify_signature(req)) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
+
+  if (req.method === 'POST') {
     const payload = req.body as IssuePayload;
     const issueTitle = payload.issue.title;
     const repositoryName = payload.repository.name;
@@ -32,8 +40,5 @@ export default function webhooksHandler(
     console.log(`Issue URL: ${issueUrl}`);
 
     res.status(200).send('Webhook received successfully');
-  } else {
-    res.status(405).send('Method Not Allowed');
   }
 }
-
