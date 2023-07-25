@@ -61,6 +61,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    automations   Automation[]
 }
 
 model VerificationToken {
@@ -69,4 +70,39 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Automation {
+  id         String   @id @default(cuid())
+  webhookID  String
+  condition  String
+  name       String
+  desc       String
+  status     String
+
+  action     Action   @relation(fields: [actionID], references: [id], onDelete: Cascade)
+  actionID   String
+
+  createdBy   User     @relation(fields: [createdByID], references: [id])
+  createdByID String
+
+  @@index([actionID])
+  @@index([createdByID])
+}
+
+model Action {
+  id            String   @id @default(cuid())
+  hookID        String   @unique
+  actionType    String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // if actionType is email
+  toEmail       String?
+  subject       String?
+  content       String?
+
+  // more actionType here and below
+
+  automations   Automation[]
 }
