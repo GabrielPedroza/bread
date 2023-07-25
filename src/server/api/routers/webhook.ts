@@ -67,13 +67,14 @@ export const webhookRouter = createTRPCRouter({
 
       if (response.status === 201) {
         // response.headers.location example - location: "https://api.github.com/repos/GabrielPedroza/exotica/hooks/425484562"
+        {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
         const locationURL = response.headers.location!;
         const lastURLSlash = locationURL.lastIndexOf("/");
         hookID = locationURL.slice(lastURLSlash + 1);
         console.log("Webhook created successfully", hookID);
       } else {
         return false;
-      };
+      }
 
     } catch (error) {
       return false;
