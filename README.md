@@ -3,15 +3,15 @@
 ## Overview
 
 Bread is a developer tool for corporate Software Engineers and Engineering Managers that streamlines Google Calendar, Mail, and Github activity, empowering them to enhance their productivity and efficiency.
-    
+
     Category: Developer Tool
-    
+
     Story: A developer tool that facilitates Software Engineers and Engineering Managers to sign in with their Google and Github account, granting access to their Mail, Calendar, and GitHub. Upon login, users are redirected to the home page, where they can replace their common tasks with automations to enhance their productivity.
-    
-    Market: The section of the market is geared towards working Software Engineers and Engineering Managers. 
-    
-    Habit: This tool is aimed to be used once or twice a month because of automations that the users set in place. 
-    
+
+    Market: The section of the market is geared towards working Software Engineers and Engineering Managers.
+
+    Habit: This tool is aimed to be used once or twice a month because of automations that the users set in place.
+
     Scope: The scope is encapsulated for Software Engineers and Engineering Managers but propagating it to other careers like recruiters, accountants, and lawyers might be out of scope.
 
 ## Description
@@ -35,13 +35,12 @@ User Persona 1: Manager Mary
     Name: Mary Johnson
     Location: New York, USA
     Age: 40
-    
-    Technology Access/Sophistication: Highly proficient with technology, primarily uses a laptop and smartphone
-    
-    Motivation: As a manager, Mary is responsible for overseeing a team and ensuring effective scheduling and coordination of meetings. She values efficiency and wants to stay updated on any changes or cancellations in the team's schedule to adjust accordingly and inform her team members promptly.
-    
-    Pain Points: Mary finds it time-consuming to manually track and update meeting changes, which often leads to miscommunication and scheduling conflicts within her team. She struggles to manage her time effectively without a clear overview of the total duration of meetings in a day.
 
+    Technology Access/Sophistication: Highly proficient with technology, primarily uses a laptop and smartphone
+
+    Motivation: As a manager, Mary is responsible for overseeing a team and ensuring effective scheduling and coordination of meetings. She values efficiency and wants to stay updated on any changes or cancellations in the team's schedule to adjust accordingly and inform her team members promptly.
+
+    Pain Points: Mary finds it time-consuming to manually track and update meeting changes, which often leads to miscommunication and scheduling conflicts within her team. She struggles to manage her time effectively without a clear overview of the total duration of meetings in a day.
 
 User Persona 2: Attendee Mark Johnson
 
@@ -52,9 +51,8 @@ User Persona 2: Attendee Mark Johnson
     Technology Access/Sophistication: Mark is highly tech-savvy and proficient in using various digital tools. He owns multiple devices, including a smartphone, tablet, and laptop, and actively seeks out new technologies to streamline his workflow.
 
     Motivation: Mark is a software engineer working for a tech startup. He attends numerous meetings, code reviews, and project discussions each week. Despite his tech proficiency, Mark tends to be slightly disorganized and struggles with managing his calendar effectively. He is motivated to find an intelligent automation tool that can seamlessly integrate with his calendar and provide timely reminders, ensuring he never misses an important meeting or falls behind schedule.
-    
-    Pain Points: Mark's disorganization occasionally leads to missed or rescheduled meetings, which not only affects his productivity but also hampers team collaboration. He desires a solution that can proactively send reminders, update events in real-time, and provide a clear overview of his daily schedule. Mark wants to optimize his time management skills, enhance his professionalism, and ensure he is always well-prepared for meetings.
 
+    Pain Points: Mark's disorganization occasionally leads to missed or rescheduled meetings, which not only affects his productivity but also hampers team collaboration. He desires a solution that can proactively send reminders, update events in real-time, and provide a clear overview of his daily schedule. Mark wants to optimize his time management skills, enhance his professionalism, and ensure he is always well-prepared for meetings.
 
 **User stories:**
 
@@ -74,10 +72,9 @@ User Persona 2: Attendee Mark Johnson
 
 - As an Engineering Manager, I want to receive email notifications when a new team member joins the organization, so I can initiate the onboarding process and provide necessary resources and guidance.
 
-- As a Software Engineer, I want to receive an email notification when a calendar meeting has been created, rescheduled, or canceled. 
+- As a Software Engineer, I want to receive an email notification when a calendar meeting has been created, rescheduled, or canceled.
 
 - As a Software Engineer, I want to receive an email notification 15 minutes before the meeting starts, so that I can join the meeting on time.
-
 
 ## Wireframe
 
@@ -112,7 +109,7 @@ User Persona 2: Attendee Mark Johnson
 ## Limitations
 
 TBD
-    
+
 ## Notes
 
 TBD

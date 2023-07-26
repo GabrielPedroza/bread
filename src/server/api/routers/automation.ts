@@ -6,38 +6,39 @@ const createAutomationSchema = z.object({
   desc: z.string(),
   webhookID: z.string(),
   condition: z.enum(["issues", "pull_request"]),
-  actionType: z.enum(["email"])
-})
+  actionType: z.enum(["email"]),
+});
 
 export const automationRouter = createTRPCRouter({
-  createAutomation: protectedProcedure.input(createAutomationSchema).mutation(async ({ ctx, input }) => {
-    const userID = ctx.session.user.id;
-  
-    const action = await ctx.prisma.action.create({
-      data: {
-        hookID: input.webhookID,
-        actionType: input.actionType,
-        toEmail: "some email", // input.toEmail,
-        subject: "some subject", // input.subject,
-        content: "some content" // input.content,
-      },
-    });
-  
-    const automation = await ctx.prisma.automation.create({
-      data: {
-        webhookID: input.webhookID,
-        name: input.name,
-        desc: input.desc,
-        status: "active",
-        condition: input.condition,
-        action: { connect: { id: action.id } },
-        createdBy: { connect: { id: userID } },
-      },
-    });
-  
-    return automation;
-  }),
-  
+  createAutomation: protectedProcedure
+    .input(createAutomationSchema)
+    .mutation(async ({ ctx, input }) => {
+      const userID = ctx.session.user.id;
+
+      const action = await ctx.prisma.action.create({
+        data: {
+          hookID: input.webhookID,
+          actionType: input.actionType,
+          toEmail: "some email", // input.toEmail,
+          subject: "some subject", // input.subject,
+          content: "some content", // input.content,
+        },
+      });
+
+      const automation = await ctx.prisma.automation.create({
+        data: {
+          webhookID: input.webhookID,
+          name: input.name,
+          desc: input.desc,
+          status: "active",
+          condition: input.condition,
+          action: { connect: { id: action.id } },
+          createdBy: { connect: { id: userID } },
+        },
+      });
+
+      return automation;
+    }),
 
   deleteAutomation: protectedProcedure
     .input(z.object({ hookID: z.string() }))
@@ -53,7 +54,7 @@ export const automationRouter = createTRPCRouter({
 
       if (!automation) {
         console.log("Automation not found or does not belong to the user.");
-        return false
+        return false;
       }
 
       await ctx.prisma.automation.delete({
@@ -61,8 +62,8 @@ export const automationRouter = createTRPCRouter({
       });
 
       await ctx.prisma.action.delete({
-        where: { hookID: input.hookID }
-      })
+        where: { hookID: input.hookID },
+      });
 
       console.log("Automation deleted successfully.");
     }),
@@ -73,7 +74,8 @@ export const automationRouter = createTRPCRouter({
     const automations = await ctx.prisma.user
       .findUnique({
         where: { id: userID },
-      }).automations();
+      })
+      .automations();
 
     return automations;
   }),

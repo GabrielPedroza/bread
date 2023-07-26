@@ -18,7 +18,7 @@ export const env = createEnv({
       // Since NextAuth.js automatically uses the VERCEL_URL if present.
       (str) => process.env.VERCEL_URL ?? str,
       // VERCEL_URL doesn't include `https` so it cant be validated as a URL
-      process.env.VERCEL ? z.string().min(1) : z.string().url(),
+      process.env.VERCEL ? z.string().min(1) : z.string().url()
     ),
     // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
     GITHUB_CLIENT: z.string().min(1),
@@ -26,7 +26,7 @@ export const env = createEnv({
     GOOGLE_CLIENT: z.string().min(1),
     GOOGLE_SECRET: z.string().min(1),
     JWT_SECRET: z.string().min(1),
-    WEBHOOK_SECRET: z.string().min(1) // make webhooks secure
+    WEBHOOK_SECRET: z.string().min(1), // make webhooks secure
   },
 
   /**
@@ -52,7 +52,7 @@ export const env = createEnv({
     GOOGLE_CLIENT: process.env.GOOGLE_CLIENT,
     GOOGLE_SECRET: process.env.GOOGLE_SECRET,
     JWT_SECRET: process.env.JWT_SECRET,
-    WEBHOOK_SECRET: process.env.WEBHOOK_SECRET
+    WEBHOOK_SECRET: process.env.WEBHOOK_SECRET,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
