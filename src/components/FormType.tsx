@@ -42,22 +42,36 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
   const { setCreateModalState, setRulesetModalState } = modals
   const { data: session } = useSession()
   
-  // show some ui error handling
-  const result = api.webhook.createWebhook.useMutation()
+  const createWebhook = api.webhook.createWebhook.useMutation()
+  const createAutomation = api.automation.createAutomation.useMutation()
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     if (!session) return "log out and log back in"
     e.preventDefault()
-    // create automation and webhook logic func calls here
-    // show some UI if worked for failed
-    result.mutate({ accessToken: session.user.accessToken })
+
+    // passing accessToken is necessary because DB access token can be stale which can cause 401: Bad Credentials
+    const createWebhookResult = await createWebhook.mutateAsync({ accessToken: session.user.accessToken })
+    if (createWebhookResult === false) {
+      console.log("log out and log back in");
+      return
+    }
+
+    if (createWebhookResult === 422) {
+      console.log("hook already exists");
+      return
+    }
+
+    createAutomation.mutate({ name: "issue on exotica repo", desc: "if user creates issue on exotica, send me an email", webhookID: createWebhookResult, actionType: "email", condition: "issues" })
 
     setCreateModalState({ open: false })
     setRulesetModalState({ open: false })
   }
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
+    <form className="space-y-4" onSubmit={(e) => {
+      {/* eslint-disable-next-line @typescript-eslint/no-floating-promises */}
+      handleSubmit(e)
+    }}>
         <div>
           <label htmlFor="eventType" className="block font-medium">
             Type of Event:
