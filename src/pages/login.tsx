@@ -12,9 +12,7 @@ const Login = () => {
       <button
         className="mb-4 rounded bg-black px-4 py-2 text-white hover:bg-gray-800"
         onClick={() => {
-          {
-            /* eslint-disable-next-line @typescript-eslint/no-floating-promises */
-          }
+          //eslint-disable-next-line @typescript-eslint/no-floating-promises
           signIn("github");
         }}
       >
@@ -23,9 +21,7 @@ const Login = () => {
       <button
         className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
         onClick={() => {
-          {
-            /* eslint-disable-next-line @typescript-eslint/no-floating-promises */
-          }
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           signIn("google");
         }}
       >

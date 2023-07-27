@@ -73,9 +73,7 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
     <form
       className="space-y-4"
       onSubmit={(e) => {
-        {
-          /* eslint-disable-next-line @typescript-eslint/no-floating-promises */
-        }
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         handleSubmit(e);
       }}
     >

@@ -96,12 +96,9 @@ export const webhookRouter = createTRPCRouter({
       return hookID;
     }),
 });
-{
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isGitHubAPIError = (error: any): error is GitHubAPIError => {
-  {
-    /* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   return typeof error.status === "number";
 };
