@@ -1,6 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from "next";
 import * as crypto from "crypto";
-import { env } from '~/env.mjs';
+import { env } from "~/env.mjs";
 
 export default function webhooksHandler(
   req: NextApiRequest,
@@ -18,9 +18,9 @@ export default function webhooksHandler(
     res.status(401).send("Unauthorized");
     return;
   }
-  
-  if (req.method === 'POST') {
-    console.log('webhook received: ', req.headers["x-github-hook-id"]);
-    res.status(200).send('Webhook received successfully');
+
+  if (req.method === "POST") {
+    console.log("webhook received: ", req.headers["x-github-hook-id"]);
+    res.status(200).send("Webhook received successfully");
   }
 }

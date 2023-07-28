@@ -6,6 +6,7 @@
     "build": "next build",
     "dev": "next dev",
     "postinstall": "prisma generate",
+    "prettify": "prettier --write .",
     "schema": "npx prisma db push && npx prisma generate",
     "lint": "next lint",
     "start": "next start"

@@ -67,21 +67,21 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.GITHUB_SECRET,
       authorization: {
         params: {
-          scope: "repo"
-        }
+          scope: "repo",
+        },
       },
       profile: (profile, tokens) => {
         if (tokens) {
           /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
-          profileWithAccessToken = { ...profile, tokens }
+          profileWithAccessToken = { ...profile, tokens };
         }
         return profileWithAccessToken;
       },
     }),
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT,
-      clientSecret: env.GOOGLE_SECRET
-    })
+      clientSecret: env.GOOGLE_SECRET,
+    }),
     /**
      * ...add more providers here.
      *
@@ -92,7 +92,7 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
-  secret: env.JWT_SECRET
+  secret: env.JWT_SECRET,
 };
 
 /**

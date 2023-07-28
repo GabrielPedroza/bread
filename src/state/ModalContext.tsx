@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 
-type eventTriggerType = "mail" | "calendar" | "github" | "" 
+type eventTriggerType = "mail" | "calendar" | "github" | "";
 
 type ModalContextType = {
   eventTriggerState: eventTriggerType;
@@ -15,31 +15,36 @@ type ModalContextType = {
   setEventTriggerState: (value: eventTriggerType) => void;
 };
 
-
 const InitialModalContext: ModalContextType = {
   eventTriggerState: "",
   createModalState: { open: false },
   rulesetModalState: { open: false },
   setCreateModalState: () => {},
   setRulesetModalState: () => {},
-  setEventTriggerState: () => {}
+  setEventTriggerState: () => {},
 };
 
-export const ModalContext = createContext<ModalContextType>(InitialModalContext);
+export const ModalContext =
+  createContext<ModalContextType>(InitialModalContext);
 
 type ModalProviderProps = {
   children: React.ReactNode;
 };
 
 export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
-  const [createModalState, setCreateModalState] = useState<{ open: boolean }>({ open: false });
-  const [eventTriggerState, setEventTriggerState] = useState<ModalContextType['eventTriggerState']>('');
-  const [rulesetModalState, setRulesetModalState] = useState<{ open: boolean }>({ open: false });
+  const [createModalState, setCreateModalState] = useState<{ open: boolean }>({
+    open: false,
+  });
+  const [eventTriggerState, setEventTriggerState] =
+    useState<ModalContextType["eventTriggerState"]>("");
+  const [rulesetModalState, setRulesetModalState] = useState<{ open: boolean }>(
+    { open: false }
+  );
 
   const handleSetCreateModalState = ({ open }: { open: boolean }) => {
     setCreateModalState({ open });
     if (open === false) {
-      setEventTriggerState('');
+      setEventTriggerState("");
     }
   };
 
@@ -53,8 +58,8 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   };
 
   return (
-    <ModalContext.Provider value={contextValues}>{children}</ModalContext.Provider>
+    <ModalContext.Provider value={contextValues}>
+      {children}
+    </ModalContext.Provider>
   );
 };
-
-

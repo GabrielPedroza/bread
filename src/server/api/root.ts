@@ -9,7 +9,7 @@ import { automationRouter } from "./routers/automation";
  */
 export const appRouter = createTRPCRouter({
   webhook: webhookRouter,
-  automation: automationRouter
+  automation: automationRouter,
 });
 
 // export type definition of API
