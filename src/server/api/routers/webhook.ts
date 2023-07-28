@@ -9,7 +9,7 @@ interface GitHubAPIError {
 
 export const webhookRouter = createTRPCRouter({
   // accessToken is optional because there can be instances where the user's session is remembered (automatically is redirected to hompage)
-  // which makes the accessToken undefined since accessToken is grabbed when user is loggin in (authenticating).
+  // which makes the accessToken undefined since accessToken is grabbed when user is logging in (authenticating).
   // if this occurs, we use the accessToken in the DB and if that is stale, we require the user to log out and log back in.
   createWebhook: protectedProcedure
     .input(z.object({ accessToken: z.string().optional() }))
@@ -73,9 +73,7 @@ export const webhookRouter = createTRPCRouter({
 
         if (response.status === 201) {
           // response.headers.location example - location: "https://api.github.com/repos/GabrielPedroza/exotica/hooks/425484562"
-          {
-            /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-          }
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           const locationURL = response.headers.location!;
           const lastURLSlash = locationURL.lastIndexOf("/");
           hookID = locationURL.slice(lastURLSlash + 1);

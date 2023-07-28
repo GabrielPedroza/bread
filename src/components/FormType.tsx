@@ -50,9 +50,7 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
     if (createWebhookResult === false) {
       console.log("log out and log back in");
       return;
-    }
-
-    if (createWebhookResult === 422) {
+    } else if (createWebhookResult === 422) {
       console.log("hook already exists");
       return;
     }
