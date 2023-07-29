@@ -1,6 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as crypto from "crypto";
 import { env } from "~/env.mjs";
+import { sendEmail } from "~/utils/sendEmail";
+
+const receivedDeliveryIds = new Set();
 
 export default function webhooksHandler(
   req: NextApiRequest,
@@ -19,8 +22,32 @@ export default function webhooksHandler(
     return;
   }
 
-  if (req.method === "POST") {
-    console.log("webhook received: ", req.headers["x-github-hook-id"]);
-    res.status(200).send("Webhook received successfully");
+  const deliveryId = req.headers["x-github-delivery"];
+  const eventType = req.headers["x-github-event"];
+
+  // checks for duplicate webhooks
+  if (receivedDeliveryIds.has(deliveryId)) {
+    res.status(202).send("Duplicate webhook received, no action needed");
+    return;
   }
+
+  // checks for initial response from github when webhook is first created
+  if (eventType === "ping") {
+    console.log("Ping event received: ", deliveryId);
+    res.status(200).send("Webhook ping received successfully");
+    return;
+  }
+
+  if (req.method === "POST") {
+    sendEmail();
+    console.log("Webhook received!");
+    res.status(200).send("Webhook received successfully");
+
+    receivedDeliveryIds.add(deliveryId);
+
+    setTimeout(() => {
+      receivedDeliveryIds.delete(deliveryId);
+    }, 3_600_000); // one hour
+  }
+  console.log(receivedDeliveryIds);
 }

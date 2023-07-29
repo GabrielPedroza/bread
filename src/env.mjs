@@ -27,6 +27,7 @@ export const env = createEnv({
     GOOGLE_SECRET: z.string().min(1),
     JWT_SECRET: z.string().min(1),
     WEBHOOK_SECRET: z.string().min(1), // make webhooks secure
+    SEND_GRID_API_KEY: z.string().min(1), // send emails
   },
 
   /**
@@ -53,6 +54,7 @@ export const env = createEnv({
     GOOGLE_SECRET: process.env.GOOGLE_SECRET,
     JWT_SECRET: process.env.JWT_SECRET,
     WEBHOOK_SECRET: process.env.WEBHOOK_SECRET,
+    SEND_GRID_API_KEY: process.env.SEND_GRID_API_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
