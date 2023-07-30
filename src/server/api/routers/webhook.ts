@@ -93,6 +93,72 @@ export const webhookRouter = createTRPCRouter({
       // returning hookID so automation model can grab it. occurs in src/components/FormType.tsx
       return hookID;
     }),
+
+  deleteWebhook: protectedProcedure
+    .input(z.object({ accessToken: z.string().optional(), hookID: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const owner = "GabrielPedroza";
+      const repo = "exotica";
+
+      // grabbing DB access token
+      const accessToken = await ctx.prisma.account
+        .findFirst({
+          where: {
+            userId: ctx.session.user.id,
+          },
+          select: {
+            access_token: true,
+          },
+        })
+        .then((account) => account?.access_token);
+
+      // if access token on DB is stale, update it.
+      if (input.accessToken != undefined && input.accessToken !== accessToken) {
+        await ctx.prisma.account.update({
+          where: {
+            userId: ctx.session.user.id,
+          },
+          data: {
+            access_token: input.accessToken,
+          },
+        });
+      }
+
+      // Getting authorization using accessToken to delete the webhook
+      const octokit = new Octokit({
+        auth: input.accessToken || accessToken,
+      });
+
+      try {
+        const response = await octokit.request(
+          "DELETE /repos/{owner}/{repo}/hooks/{hook_id}",
+          {
+            owner,
+            repo,
+            hook_id: input.hookID,
+            headers: {
+              "X-GitHub-Api-Version": "2022-11-28",
+            },
+          }
+        );
+
+        if (response.status === 204) {
+          console.log("Webhook deleted successfully");
+          return input.hookID;
+        } else if (response.status === 404) {
+          console.log("WebHook doesn't exist", response.status);
+          return false;
+        } else {
+          console.log("log out and log back in");
+          return false;
+        }
+      } catch (error) {
+        if (isGitHubAPIError(error)) {
+          console.log("Error deleting webhook:", error.status);
+        }
+        return false;
+      }
+    }),
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
