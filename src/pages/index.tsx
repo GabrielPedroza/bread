@@ -1,6 +1,7 @@
 import { type GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import Head from "next/head";
+import Image from "next/image";
 import Navbar from "~/components/Navbar";
 
 export default function Home() {
@@ -12,11 +13,25 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
-      <div className="mt-10 flex flex-col justify-center text-center align-middle">
-        <h1 className="text-7xl">Bread</h1>
-        <div className="flex flex-col justify-center align-middle">
-          <h3>An Automation Tool</h3>
-          <h3>For Engineers</h3>
+      <div className="absolute mt-10 flex flex-col justify-center text-center align-middle">
+        <h1 className="relative right-48 top-12 font-greatvibes text-8xl text-amber-950">
+          Bread
+        </h1>
+        <div className="relative bottom-[20rem] left-16 h-[900px] w-[1200px] -rotate-[15deg] opacity-90">
+          <Image
+            src={"/bread-logo.png"}
+            alt="Bread logo"
+            fill
+            draggable="false"
+          />
+        </div>
+        <div className="absolute bottom-96 left-96 flex flex-col justify-center align-middle font-serif text-amber-950 opacity-80 backdrop-blur-md backdrop-filter">
+          <div className="relative -mb-[2px] w-[700px] rounded-lg rounded-bl-none border-2 border-black bg-mainBackground py-6 text-4xl">
+            <h3>An Automation Tool</h3>
+          </div>
+          <div className="w-[300px] rounded-b-lg border-2 border-black bg-mainBackground py-4 text-3xl">
+            <h3>For Engineers</h3>
+          </div>
         </div>
       </div>
     </>

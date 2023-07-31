@@ -33,8 +33,7 @@ const UserAutomations = () => {
                 <div>{automation.status}</div>
                 <button
                   onClick={() => {
-                    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                    handleDelete(automation);
+                    deleteAutomation.mutate({ hookID: automation.webhookID });
                   }}
                 >
                   delete
