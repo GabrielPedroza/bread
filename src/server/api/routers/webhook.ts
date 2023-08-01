@@ -84,9 +84,9 @@ export const webhookRouter = createTRPCRouter({
           if (error.status === 422) {
             return 422;
           } else if (error.status === 404) {
-            return 404
+            return 404;
           } else {
-            return false
+            return false;
           }
         }
         // a possible error can be 401: Bad Credentials if DB accessToken is stale AND user's session is remembered.
@@ -154,7 +154,7 @@ export const webhookRouter = createTRPCRouter({
         }
       } catch (error) {
         if (isGitHubAPIError(error)) {
-          return error.status
+          return error.status;
         }
       }
       return false;
