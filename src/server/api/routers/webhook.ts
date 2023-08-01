@@ -77,13 +77,16 @@ export const webhookRouter = createTRPCRouter({
           const locationURL = response.headers.location!;
           const lastURLSlash = locationURL.lastIndexOf("/");
           hookID = locationURL.slice(lastURLSlash + 1);
-          console.log("Webhook created successfully", hookID);
         }
       } catch (error) {
         if (isGitHubAPIError(error)) {
           // if 422: hook already exists in the repository
           if (error.status === 422) {
             return 422;
+          } else if (error.status === 404) {
+            return 404
+          } else {
+            return false
           }
         }
         // a possible error can be 401: Bad Credentials if DB accessToken is stale AND user's session is remembered.
@@ -143,21 +146,18 @@ export const webhookRouter = createTRPCRouter({
         );
 
         if (response.status === 204) {
-          console.log("Webhook deleted successfully");
           return input.hookID;
         } else if (response.status === 404) {
-          console.log("WebHook doesn't exist", response.status);
-          return false;
+          return 404;
         } else {
-          console.log("log out and log back in");
           return false;
         }
       } catch (error) {
         if (isGitHubAPIError(error)) {
-          console.log("Error deleting webhook:", error.status);
+          return error.status
         }
-        return false;
       }
+      return false;
     }),
 });
 
