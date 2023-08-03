@@ -59,43 +59,47 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
       toast.loading("Reviewing your conditions and permissions...");
 
       // passing accessToken is necessary because DB access token can be stale which can cause 401: Bad Credentials
-      const createWebhookResult = await createWebhook.mutateAsync({
+      const createWebhookResultObject = await createWebhook.mutateAsync({
         accessToken: session.user.accessToken,
       });
-      if (createWebhookResult === false) {
-        toast.dismiss();
-        toast.error("Log Out and Log Back In");
-        setLoading(false);
-        return;
-      } else if (createWebhookResult === 422) {
-        toast.dismiss();
-        toast.error("This exact automation already exists!");
-        setLoading(false);
-        return;
-      } else if (createWebhookResult === 404) {
-        toast.dismiss();
-        toast.error(
-          "Conditions are invalid. Double check what you've written and make sure you have the right permissions!"
-        );
-        setLoading(false);
-        return;
-      }
 
-      try {
-        await createAutomation.mutateAsync({
-          name: "issue on exotica repo",
-          desc: "if user creates issue on exotica, send me an email",
-          webhookID: createWebhookResult,
-          actionType: "email",
-          condition: "issues",
-        });
-      } catch (e) {
-        toast.dismiss();
-        toast.error(
-          "Credentials are good but there was an error creating the automation. Log out, log back in, and try again!"
-        );
-        setLoading(false);
-        return;
+      if (createWebhookResultObject.error) {
+        if (createWebhookResultObject.status === 404) {
+          toast.dismiss();
+          toast.error(
+            "Conditions are invalid. Double check what you've written and make sure you have the right permissions!"
+          );
+          setLoading(false);
+          return;
+        } else if (createWebhookResultObject.status === 422) {
+          toast.dismiss();
+          toast.error("This exact automation already exists!");
+          setLoading(false);
+          return;
+        } else if (createWebhookResultObject.status === 500) {
+          toast.dismiss();
+          toast.error("Log Out and Log Back In");
+          setLoading(false);
+          return;
+        }
+      } else {
+        try {
+          await createAutomation.mutateAsync({
+            name: "issue on exotica repo",
+            desc: "if user creates issue on exotica, send me an email",
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            webhookID: createWebhookResultObject.data!, // this will have data guaranteed
+            actionType: "email",
+            condition: "issues",
+          });
+        } catch (e) {
+          toast.dismiss();
+          toast.error(
+            "Credentials are good but there was an error creating the automation. Log out, log back in, and try again!"
+          );
+          setLoading(false);
+          return;
+        }
       }
 
       toast.dismiss();

@@ -25,27 +25,27 @@ const UserAutomations = () => {
     } else {
       toast.dismiss();
       toast.loading("Deleting Automation");
-      const deleteWebHookAndReturnHookID = await deleteWebHook.mutateAsync({
+      const deleteWebHookResultObject = await deleteWebHook.mutateAsync({
         hookID: Number(automation.webhookID),
         accessToken: session?.user.accessToken,
       });
 
-      if (
-        deleteWebHookAndReturnHookID &&
-        deleteWebHookAndReturnHookID !== 404
-      ) {
-        await deleteAutomation.mutateAsync({ hookID: automation.webhookID });
-      } else if (deleteWebHookAndReturnHookID === 404) {
-        toast.dismiss();
-        toast.error("Cannot find your WebHook");
-        setLoading(false);
-        return;
+      if (deleteWebHookResultObject.error) {
+        if (deleteWebHookResultObject.status === 404) {
+          toast.dismiss();
+          toast.error("Cannot find your WebHook");
+          setLoading(false);
+          return;
+        } else {
+          toast.dismiss();
+          toast.error("Log Out and Log Back In");
+          setLoading(false);
+          return;
+        }
       } else {
-        toast.dismiss();
-        toast.error("Log Out and Log Back In");
-        setLoading(false);
-        return;
+        await deleteAutomation.mutateAsync({ hookID: automation.webhookID });
       }
+
       toast.dismiss();
       toast.success("Automation Deleted", {
         style: {
