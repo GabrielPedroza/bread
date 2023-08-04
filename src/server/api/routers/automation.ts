@@ -53,7 +53,6 @@ export const automationRouter = createTRPCRouter({
       });
 
       if (!automation) {
-        console.log("Automation not found or does not belong to the user.");
         return false;
       }
 
@@ -64,8 +63,6 @@ export const automationRouter = createTRPCRouter({
       await ctx.prisma.action.delete({
         where: { hookID: input.hookID },
       });
-
-      console.log("Automation deleted successfully.");
     }),
 
   getUserAutomations: protectedProcedure.query(async ({ ctx }) => {

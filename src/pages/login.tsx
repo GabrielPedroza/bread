@@ -34,7 +34,7 @@ const Login = () => {
             <button
               className="mb-4 rounded bg-amber-950 px-8 py-4 text-white transition-all hover:scale-105 hover:bg-amber-900"
               onClick={() => {
-                //eslint-disable-next-line @typescript-eslint/no-floating-promises
+                // eslint-disable-next-line @typescript-eslint/no-floating-promises
                 signIn("github");
               }}
             >
