@@ -12,7 +12,7 @@ const RulesetAutomationModal = () => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="relative h-[800px] w-[500px] rounded-lg bg-orange-400 p-6 shadow-lg">
         <h3 className="mb-4 text-xl font-bold">Ruleset Modal</h3>
         <FormType />

@@ -33,14 +33,12 @@ export default function webhooksHandler(
 
   // checks for initial response from github when webhook is first created
   if (eventType === "ping") {
-    console.log("Ping event received: ", deliveryId);
     res.status(200).send("Webhook ping received successfully");
     return;
   }
 
   if (req.method === "POST") {
     sendEmail();
-    console.log("Webhook received!");
     res.status(200).send("Webhook received successfully");
 
     receivedDeliveryIds.add(deliveryId);
@@ -49,5 +47,4 @@ export default function webhooksHandler(
       receivedDeliveryIds.delete(deliveryId);
     }, 3_600_000); // one hour
   }
-  console.log(receivedDeliveryIds);
 }

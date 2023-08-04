@@ -47,7 +47,7 @@ const CreateAutomationModal = () => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-slate-400 bg-opacity-[15%]">
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-400 bg-opacity-[15%]">
       <div className="absolute z-10 h-[800px] w-[500px] bg-blue-500">
         <p>Create Modal</p>
         <button

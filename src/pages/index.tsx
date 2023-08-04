@@ -19,6 +19,7 @@ export default function Home() {
         </h1>
         <div className="relative bottom-[20rem] left-16 h-[900px] w-[1200px] -rotate-[15deg] opacity-90">
           <Image
+            priority
             src={"/bread-logo.png"}
             alt="Bread logo"
             fill
