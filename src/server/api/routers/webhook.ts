@@ -91,32 +91,32 @@ export const webhookRouter = createTRPCRouter({
             return {
               error: true,
               status: 422,
-            }
+            };
           } else if (error.status === 404) {
             return {
               error: true,
               status: 404,
-            }
+            };
           } else {
             return {
               // a possible error can be 401: Bad Credentials if DB accessToken is stale AND user's session is remembered.
               // We require the user to log out and log in.
               error: true,
               status: 401,
-            }
+            };
           }
         }
         return {
           error: true,
           status: 500,
-        }
+        };
       }
       // returning hookID so automation model can grab it. occurs in src/components/FormType.tsx
       return {
         error: false,
         status: 200,
-        data: hookID
-      }
+        data: hookID,
+      };
     }),
 
   deleteWebhook: protectedProcedure
@@ -171,31 +171,31 @@ export const webhookRouter = createTRPCRouter({
           return {
             error: false,
             data: String(input.hookID),
-            status: 204
-          }
+            status: 204,
+          };
         } else if (response.status === 404) {
           return {
             error: true,
             status: 404,
-          }
+          };
         } else {
           return {
             error: true,
             status: 500,
-          }
+          };
         }
       } catch (error) {
         if (isGitHubAPIError(error)) {
           return {
             error: true,
             status: error.status,
-          }
+          };
         }
       }
       return {
         error: true,
         status: 500,
-      }
+      };
     }),
 });
 
