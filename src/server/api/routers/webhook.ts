@@ -10,7 +10,7 @@ interface GitHubAPIError {
 interface WebHookReturnObject {
   error: boolean;
   status: number;
-  data: string | null;
+  data?: string;
 }
 
 export const webhookRouter = createTRPCRouter({
@@ -91,13 +91,11 @@ export const webhookRouter = createTRPCRouter({
             return {
               error: true,
               status: 422,
-              data: null
             }
           } else if (error.status === 404) {
             return {
               error: true,
               status: 404,
-              data: null
             }
           } else {
             return {
@@ -105,14 +103,12 @@ export const webhookRouter = createTRPCRouter({
               // We require the user to log out and log in.
               error: true,
               status: 401,
-              data: null
             }
           }
         }
         return {
           error: true,
           status: 500,
-          data: null
         }
       }
       // returning hookID so automation model can grab it. occurs in src/components/FormType.tsx
@@ -181,13 +177,11 @@ export const webhookRouter = createTRPCRouter({
           return {
             error: true,
             status: 404,
-            data: null
           }
         } else {
           return {
             error: true,
             status: 500,
-            data: null
           }
         }
       } catch (error) {
@@ -195,14 +189,12 @@ export const webhookRouter = createTRPCRouter({
           return {
             error: true,
             status: error.status,
-            data: null
           }
         }
       }
       return {
         error: true,
         status: 500,
-        data: null
       }
     }),
 });
