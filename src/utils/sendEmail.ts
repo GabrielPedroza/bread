@@ -16,6 +16,6 @@ export const sendEmail = () => {
     text: "and easy to do anywhere, even with Node.js",
     html: "<strong>and easy to do anywhere, even with Node.js</strong>",
   };
-
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   sgMail.send(msg)
 };
