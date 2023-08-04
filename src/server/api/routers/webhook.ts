@@ -7,13 +7,19 @@ interface GitHubAPIError {
   status: number;
 }
 
+interface WebHookReturnObject {
+  error: boolean;
+  status: number;
+  data?: string;
+}
+
 export const webhookRouter = createTRPCRouter({
   // accessToken is optional because there can be instances where the user's session is remembered (automatically is redirected to hompage)
   // which makes the accessToken undefined since accessToken is grabbed when user is logging in (authenticating).
   // if this occurs, we use the accessToken in the DB and if that is stale, we require the user to log out and log back in.
   createWebhook: protectedProcedure
     .input(z.object({ accessToken: z.string().optional() }))
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }): Promise<WebHookReturnObject> => {
       const owner = "GabrielPedroza";
       const repo = "exotica";
 
@@ -77,26 +83,45 @@ export const webhookRouter = createTRPCRouter({
           const locationURL = response.headers.location!;
           const lastURLSlash = locationURL.lastIndexOf("/");
           hookID = locationURL.slice(lastURLSlash + 1);
-          console.log("Webhook created successfully", hookID);
         }
       } catch (error) {
         if (isGitHubAPIError(error)) {
           // if 422: hook already exists in the repository
           if (error.status === 422) {
-            return 422;
+            return {
+              error: true,
+              status: 422,
+            }
+          } else if (error.status === 404) {
+            return {
+              error: true,
+              status: 404,
+            }
+          } else {
+            return {
+              // a possible error can be 401: Bad Credentials if DB accessToken is stale AND user's session is remembered.
+              // We require the user to log out and log in.
+              error: true,
+              status: 401,
+            }
           }
         }
-        // a possible error can be 401: Bad Credentials if DB accessToken is stale AND user's session is remembered.
-        // We require the user to log out and log in.
-        return false;
+        return {
+          error: true,
+          status: 500,
+        }
       }
       // returning hookID so automation model can grab it. occurs in src/components/FormType.tsx
-      return hookID;
+      return {
+        error: false,
+        status: 200,
+        data: hookID
+      }
     }),
 
   deleteWebhook: protectedProcedure
     .input(z.object({ accessToken: z.string().optional(), hookID: z.number() }))
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }): Promise<WebHookReturnObject> => {
       const owner = "GabrielPedroza";
       const repo = "exotica";
 
@@ -143,20 +168,33 @@ export const webhookRouter = createTRPCRouter({
         );
 
         if (response.status === 204) {
-          console.log("Webhook deleted successfully");
-          return input.hookID;
+          return {
+            error: false,
+            data: String(input.hookID),
+            status: 204
+          }
         } else if (response.status === 404) {
-          console.log("WebHook doesn't exist", response.status);
-          return false;
+          return {
+            error: true,
+            status: 404,
+          }
         } else {
-          console.log("log out and log back in");
-          return false;
+          return {
+            error: true,
+            status: 500,
+          }
         }
       } catch (error) {
         if (isGitHubAPIError(error)) {
-          console.log("Error deleting webhook:", error.status);
+          return {
+            error: true,
+            status: error.status,
+          }
         }
-        return false;
+      }
+      return {
+        error: true,
+        status: 500,
       }
     }),
 });

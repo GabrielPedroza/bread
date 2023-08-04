@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { toast } from "react-hot-toast";
 import { ModalContext } from "~/state/ModalContext";
 import { api } from "~/utils/api";
 
@@ -34,37 +35,92 @@ const MailFormType = () => <div>this is a mail only form</div>;
 const CalendarFormType = () => <div>this is a calendar only form</div>;
 const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
   const { setCreateModalState, setRulesetModalState } = modals;
+  const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
 
   const createWebhook = api.webhook.createWebhook.useMutation();
   const createAutomation = api.automation.createAutomation.useMutation();
+  const userAutomations = api.automation.getUserAutomations.useQuery();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    if (!session) return "log out and log back in";
     e.preventDefault();
+    setLoading(true);
+    if (loading) {
+      toast.dismiss();
+      toast.error("Stop spamming 😡");
+    } else {
+      if (!session) {
+        toast.dismiss();
+        toast.error("Log Out and Log Back In");
+        setLoading(false);
+        return;
+      }
+      toast.dismiss();
+      toast.loading("Reviewing your conditions and permissions...");
 
-    // passing accessToken is necessary because DB access token can be stale which can cause 401: Bad Credentials
-    const createWebhookResult = await createWebhook.mutateAsync({
-      accessToken: session.user.accessToken,
-    });
-    if (createWebhookResult === false) {
-      console.log("log out and log back in");
-      return;
-    } else if (createWebhookResult === 422) {
-      console.log("hook already exists");
-      return;
+      // passing accessToken is necessary because DB access token can be stale which can cause 401: Bad Credentials
+      const createWebhookResultObject = await createWebhook.mutateAsync({
+        accessToken: session.user.accessToken,
+      });
+
+      if (createWebhookResultObject.error) {
+        if (createWebhookResultObject.status === 404) {
+          toast.dismiss();
+          toast.error(
+            "Conditions are invalid. Double check what you've written and make sure you have the right permissions!"
+          );
+          setLoading(false);
+          return;
+        } else if (createWebhookResultObject.status === 422) {
+          toast.dismiss();
+          toast.error("This exact automation already exists!");
+          setLoading(false);
+          return;
+        } else if (createWebhookResultObject.status === 500) {
+          toast.dismiss();
+          toast.error("Log Out and Log Back In");
+          setLoading(false);
+          return;
+        }
+      } else {
+        try {
+          await createAutomation.mutateAsync({
+            name: "issue on exotica repo",
+            desc: "if user creates issue on exotica, send me an email",
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            webhookID: createWebhookResultObject.data!, // this will have data guaranteed
+            actionType: "email",
+            condition: "issues",
+          });
+        } catch (e) {
+          toast.dismiss();
+          toast.error(
+            "Credentials are good but there was an error creating the automation. Log out, log back in, and try again!"
+          );
+          setLoading(false);
+          return;
+        }
+      }
+
+      toast.dismiss();
+      toast.success("Automation Created", {
+        style: {
+          border: "1px solid #713200",
+          padding: "16px",
+          color: "#713200",
+        },
+        iconTheme: {
+          primary: "#713200",
+          secondary: "#FFFAEE",
+        },
+      });
+
+      await userAutomations.refetch();
+
+      setLoading(false);
+      setCreateModalState({ open: false });
+      setRulesetModalState({ open: false });
     }
-
-    createAutomation.mutate({
-      name: "issue on exotica repo",
-      desc: "if user creates issue on exotica, send me an email",
-      webhookID: createWebhookResult,
-      actionType: "email",
-      condition: "issues",
-    });
-
-    setCreateModalState({ open: false });
-    setRulesetModalState({ open: false });
   };
 
   return (
