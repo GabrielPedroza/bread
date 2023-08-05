@@ -15,17 +15,28 @@ type ModalContextType = {
   setEventTriggerState: (value: eventTriggerType) => void;
 };
 
-const InitialModalContext: ModalContextType = {
-  eventTriggerState: "",
-  createModalState: { open: false },
-  rulesetModalState: { open: false },
-  setCreateModalState: () => {},
-  setRulesetModalState: () => {},
-  setEventTriggerState: () => {},
-};
+type ModalContextTypeWithCollapsedReccommendedAutomationsState =
+  ModalContextType & {
+    isCollapsed: boolean;
+    setIsCollapsed: (value: boolean) => void;
+  };
+
+const InitialModalContext: ModalContextTypeWithCollapsedReccommendedAutomationsState =
+  {
+    eventTriggerState: "",
+    isCollapsed: false,
+    createModalState: { open: false },
+    rulesetModalState: { open: false },
+    setIsCollapsed: () => {},
+    setCreateModalState: () => {},
+    setRulesetModalState: () => {},
+    setEventTriggerState: () => {},
+  };
 
 export const ModalContext =
-  createContext<ModalContextType>(InitialModalContext);
+  createContext<ModalContextTypeWithCollapsedReccommendedAutomationsState>(
+    InitialModalContext
+  );
 
 type ModalProviderProps = {
   children: React.ReactNode;
@@ -41,6 +52,8 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
     { open: false }
   );
 
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+
   const handleSetCreateModalState = ({ open }: { open: boolean }) => {
     setCreateModalState({ open });
     if (open === false) {
@@ -48,14 +61,17 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
     }
   };
 
-  const contextValues: ModalContextType = {
-    eventTriggerState: eventTriggerState,
-    createModalState: createModalState,
-    rulesetModalState: rulesetModalState,
-    setCreateModalState: handleSetCreateModalState,
-    setRulesetModalState: ({ open }) => setRulesetModalState({ open }),
-    setEventTriggerState: (value) => setEventTriggerState(value),
-  };
+  const contextValues: ModalContextTypeWithCollapsedReccommendedAutomationsState =
+    {
+      isCollapsed,
+      eventTriggerState: eventTriggerState,
+      createModalState: createModalState,
+      rulesetModalState: rulesetModalState,
+      setIsCollapsed: (value) => setIsCollapsed(value),
+      setCreateModalState: handleSetCreateModalState,
+      setRulesetModalState: ({ open }) => setRulesetModalState({ open }),
+      setEventTriggerState: (value) => setEventTriggerState(value),
+    };
 
   return (
     <ModalContext.Provider value={contextValues}>

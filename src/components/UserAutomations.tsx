@@ -3,13 +3,15 @@ import { type AutomationType } from "~/server/types/automation";
 import { api } from "~/utils/api";
 import { AiFillDelete, AiOutlineLoading } from "react-icons/ai";
 import { toast } from "react-hot-toast";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ModalContext } from "~/state/ModalContext";
 
 const UserAutomations = () => {
   const userAutomations = api.automation.getUserAutomations.useQuery();
   const deleteAutomation = api.automation.deleteAutomation.useMutation();
   const deleteWebHook = api.webhook.deleteWebhook.useMutation();
   const [loading, setLoading] = useState(false);
+  const { isCollapsed } = useContext(ModalContext);
 
   const { data: session } = useSession();
 
@@ -64,7 +66,11 @@ const UserAutomations = () => {
   };
 
   return (
-    <div className="relative mx-auto mt-5 h-[45%] w-11/12">
+    <div
+      className={`relative mx-auto mt-5 h-[45%] w-11/12 ${
+        isCollapsed ? "h-[85%]" : "h-[45%]"
+      }`}
+    >
       <h2 className="relative left-8 top-4 mb-10 text-3xl font-bold text-amber-900">
         My Automations
       </h2>
