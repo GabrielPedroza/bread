@@ -30,9 +30,17 @@ const FormType = () => {
   );
 };
 
-const MailFormType = () => <div>this is a mail only form</div>;
+const MailFormType = () => (
+  <div className="my-20 text-center text-4xl text-white">
+    Mail feature coming soon!
+  </div>
+);
 
-const CalendarFormType = () => <div>this is a calendar only form</div>;
+const CalendarFormType = () => (
+  <div className="my-20 text-center text-4xl text-white">
+    Calendar feature coming soon!
+  </div>
+);
 const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
   const { setCreateModalState, setRulesetModalState } = modals;
   const [loading, setLoading] = useState(false);
@@ -131,8 +139,8 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
         handleSubmit(e);
       }}
     >
-      <div>
-        <label htmlFor="eventType" className="block font-medium">
+      <div className="relative">
+        <label htmlFor="eventType" className="block font-medium text-white">
           Type of Event:
         </label>
         <select
@@ -148,7 +156,7 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
         </select>
       </div>
       <div>
-        <label htmlFor="ifCondition" className="block font-medium">
+        <label htmlFor="ifCondition" className="block font-medium text-white">
           If:
         </label>
         <select
@@ -176,7 +184,7 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
         </select>
       </div>
       <div>
-        <label htmlFor="elseCondition" className="block font-medium">
+        <label htmlFor="elseCondition" className="block font-medium text-white">
           Then:
         </label>
         <select
@@ -198,12 +206,12 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
           name="repeat"
           className="mr-2"
         />
-        <label htmlFor="repeatCheckbox" className="font-medium">
+        <label htmlFor="repeatCheckbox" className="font-medium text-white">
           Repeat
         </label>
       </div>
       <button
-        className="mr-2 rounded bg-blue-500 px-4 py-2 text-white"
+        className="absolute bottom-5 right-5 mr-2 rounded bg-blue-500 px-4 py-2 text-white transition-all hover:scale-[102%]"
         type="submit"
       >
         Create Automation

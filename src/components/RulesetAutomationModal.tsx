@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { ModalContext } from "~/state/ModalContext";
 import FormType from "./FormType";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const RulesetAutomationModal = () => {
   const { setCreateModalState, setRulesetModalState } =
@@ -13,12 +14,14 @@ const RulesetAutomationModal = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="relative h-[800px] w-[500px] rounded-lg bg-orange-400 p-6 shadow-lg">
-        <h3 className="mb-4 text-xl font-bold">Ruleset Modal</h3>
+      <div className="relative h-[800px] w-[500px] rounded-lg border-2 border-amber-950 bg-amber-900 p-6 shadow-lg">
+        <h3 className="mb-4 text-center text-3xl font-bold text-slate-100">
+          Ruleset Modal
+        </h3>
         <FormType />
-        <div className="mt-4 flex justify-between">
+        <div className="absolute bottom-5 mt-4 flex justify-between">
           <button
-            className="rounded bg-gray-300 px-4 py-2 text-gray-700"
+            className="rounded bg-gray-300 px-4 py-2 text-gray-700 transition-all hover:scale-[102%]"
             type="button"
             aria-label="Go Back to Create Automation Modal"
             onClick={() => setRulesetModalState({ open: false })}
@@ -28,11 +31,11 @@ const RulesetAutomationModal = () => {
         </div>
         <button
           type="button"
-          className="absolute right-4 top-4 text-4xl text-black"
+          className="absolute right-6 top-6 text-4xl text-slate-100 transition-all hover:scale-105"
           aria-label="Close Both Create and Ruleset Modals"
           onClick={handleClose}
         >
-          X
+          <AiOutlineCloseCircle />
         </button>
       </div>
     </div>
