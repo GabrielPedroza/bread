@@ -18,10 +18,17 @@ export const webhookRouter = createTRPCRouter({
   // which makes the accessToken undefined since accessToken is grabbed when user is logging in (authenticating).
   // if this occurs, we use the accessToken in the DB and if that is stale, we require the user to log out and log back in.
   createWebhook: protectedProcedure
-    .input(z.object({ accessToken: z.string().optional() }))
+    .input(
+      z.object({
+        accessToken: z.string().optional(),
+        repository: z.string(),
+        events: z.enum(["issues", "pull_request", "push", "star", ""]),
+        owner: z.string(),
+      })
+    )
     .mutation(async ({ ctx, input }): Promise<WebHookReturnObject> => {
-      const owner = "GabrielPedroza";
-      const repo = "exotica";
+      const owner = input.owner;
+      const repo = input.repository;
 
       const WEBHOOK_URL = "https://hkdk.events/G3KE7hkFpr5I";
       // const WEBHOOK_URL = "https://bread-meta.vercel.app/api/webhooks/webhook";
@@ -64,7 +71,7 @@ export const webhookRouter = createTRPCRouter({
             repo,
             name: "web",
             active: true,
-            events: ["issues", "pull_request"],
+            events: [input.events],
             config: {
               url: WEBHOOK_URL,
               content_type: "json",
