@@ -129,8 +129,15 @@ export const webhookRouter = createTRPCRouter({
   deleteWebhook: protectedProcedure
     .input(z.object({ accessToken: z.string().optional(), hookID: z.number() }))
     .mutation(async ({ ctx, input }): Promise<WebHookReturnObject> => {
-      const owner = "GabrielPedroza";
-      const repo = "exotica";
+      const automation = await ctx.prisma.automation.findFirst({
+        where: {
+          webhookID: String(input.hookID),
+        },
+        select: {
+          owner: true,
+          repository: true,
+        },
+      });
 
       // grabbing DB access token
       const accessToken = await ctx.prisma.account
@@ -165,8 +172,10 @@ export const webhookRouter = createTRPCRouter({
         const response = await octokit.request(
           "DELETE /repos/{owner}/{repo}/hooks/{hook_id}",
           {
-            owner,
-            repo,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+            owner: automation?.owner!,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+            repo: automation?.repository!,
             hook_id: input.hookID,
             headers: {
               "X-GitHub-Api-Version": "2022-11-28",

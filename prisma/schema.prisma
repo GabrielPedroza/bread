@@ -77,6 +77,8 @@ model Automation {
   webhookID  String
   condition  String
   name       String
+  owner      String
+  repository String
   desc       String
   status     String
 
