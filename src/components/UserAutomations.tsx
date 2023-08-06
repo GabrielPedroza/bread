@@ -90,7 +90,13 @@ const UserAutomations = () => {
                 <div className="relative top-[0.15rem] -ml-10 w-40 truncate text-amber-950">
                   {automation.name}
                 </div>
-                <div className="hover: relative top-[0.15rem] -ml-10 w-44 truncate text-amber-950">
+                <div className="absolute left-8 z-50 max-h-fit max-w-[30ch] cursor-default overflow-hidden scroll-auto whitespace-normal border-2 bg-slate-50 text-center opacity-0 transition-all hover:opacity-100">
+                  {automation.name}
+                </div>
+                <div className="relative top-[0.15rem] -ml-10 w-44 truncate text-amber-950">
+                  {automation.desc}
+                </div>
+                <div className="absolute z-50 max-h-fit max-w-[30ch] cursor-default overflow-hidden scroll-auto whitespace-normal border-2 bg-slate-50 text-center opacity-0 transition-all hover:opacity-100">
                   {automation.desc}
                 </div>
                 <div>

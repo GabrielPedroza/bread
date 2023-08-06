@@ -5,8 +5,8 @@ const createAutomationSchema = z.object({
   name: z.string(),
   desc: z.string(),
   webhookID: z.string(),
-  condition: z.enum(["issues", "pull_request"]),
-  actionType: z.enum(["email"]),
+  condition: z.enum(["issues", "pull_request", "push", "star", ""]),
+  actionType: z.enum(["email", ""]),
 });
 
 export const automationRouter = createTRPCRouter({
