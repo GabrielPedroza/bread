@@ -109,6 +109,8 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
           await createAutomation.mutateAsync({
             name: automationName,
             desc: automationDescription,
+            owner,
+            repository: repositoryName,
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             webhookID: createWebhookResultObject.data!, // this will have data guaranteed
             actionType: thenCondition,

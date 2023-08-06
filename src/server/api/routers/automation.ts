@@ -4,6 +4,8 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 const createAutomationSchema = z.object({
   name: z.string(),
   desc: z.string(),
+  owner: z.string(),
+  repository: z.string(),
   webhookID: z.string(),
   condition: z.enum(["issues", "pull_request", "push", "star", ""]),
   actionType: z.enum(["email", ""]),
@@ -30,6 +32,8 @@ export const automationRouter = createTRPCRouter({
           webhookID: input.webhookID,
           name: input.name,
           desc: input.desc,
+          owner: input.owner,
+          repository: input.repository,
           status: "active",
           condition: input.condition,
           action: { connect: { id: action.id } },
