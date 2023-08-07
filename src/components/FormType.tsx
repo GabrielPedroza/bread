@@ -52,7 +52,7 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
     setRepositoryEventSelected,
     setEmailSelected,
     setRulesetFormIfCondition,
-    setRulesetFormThenAction
+    setRulesetFormThenAction,
   } = useContext(ModalContext);
   const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
