@@ -4,17 +4,32 @@
 import sgMail from "@sendgrid/mail";
 import { env } from "~/env.mjs";
 
+export type AutomationAndActionByWebHookIDType = {
+  action: {
+    toEmail: string;
+    subject: string;
+    actionType: string;
+    scheduleSend: number;
+  };
+};
+
 // CHECK SPAM WHEN EXPECTING EMAILS
-export const sendEmail = () => {
+export const sendEmail = (
+  automationAndActionByWebHookID: AutomationAndActionByWebHookIDType,
+  bodyResponse: unknown,
+  eventType: string
+) => {
+  const scheduleSendInSeconds =
+    automationAndActionByWebHookID.action.scheduleSend;
+
   sgMail.setApiKey(env.SEND_GRID_API_KEY);
 
-  // info here will be grabbed from params that contain user's info from automation
   const msg = {
-    to: "gabrielpedroza2002167@gmail.com", // enter your email here for testing purposes
+    to: automationAndActionByWebHookID.action.toEmail, // enter your email here for testing purposes
     from: "BreadForMeta@gmail.com",
-    subject: "Sending with SendGrid is Fun",
-    text: "and easy to do anywhere, even with Node.js",
-    html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+    subject: automationAndActionByWebHookID.action.subject,
+    text: JSON.stringify(bodyResponse),
+    sendAt: Math.floor(Date.now() / 1000 + scheduleSendInSeconds * 60), // defer email in UNIX Timestamp
   };
   // eslint-disable-next-line @typescript-eslint/no-floating-promises
   sgMail.send(msg);

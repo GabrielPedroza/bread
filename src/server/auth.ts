@@ -1,12 +1,11 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { type GetServerSidePropsContext } from "next";
 import GitHubProvider from "next-auth/providers/github";
-import GoogleProvider from "next-auth/providers/google";
+// import GoogleProvider from "next-auth/providers/google";
 import {
   getServerSession,
   type NextAuthOptions,
   type DefaultSession,
-  type User,
 } from "next-auth";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
@@ -34,13 +33,13 @@ declare module "next-auth" {
   }
 }
 
-interface UserWithAccessToken extends User {
-  tokens: {
-    access_token: string;
-  };
-}
+// interface UserWithAccessToken extends User {
+//   tokens: {
+//     access_token: string;
+//   };
+// }
 
-let profileWithAccessToken: UserWithAccessToken;
+// let profileWithAccessToken: UserWithAccessToken;
 
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -55,7 +54,7 @@ export const authOptions: NextAuthOptions = {
         user: {
           ...session.user,
           id: user.id,
-          accessToken: profileWithAccessToken?.tokens.access_token,
+          // accessToken: profileWithAccessToken?.tokens.access_token,
         },
       };
     },
@@ -70,18 +69,19 @@ export const authOptions: NextAuthOptions = {
           scope: "repo",
         },
       },
-      profile: (profile, tokens) => {
-        if (tokens) {
-          /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
-          profileWithAccessToken = { ...profile, tokens };
-        }
-        return profileWithAccessToken;
-      },
+      // DANGEROUS SESSION ACCESS TOKEN - Errors when user first attempts to log in the site but works afterwards.
+      // profile: (profile, tokens) => {
+      //   if (tokens) {
+      //     /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
+      //     profileWithAccessToken = { ...profile, tokens };
+      //   }
+      //   return profileWithAccessToken;
+      // },
     }),
-    GoogleProvider({
-      clientId: env.GOOGLE_CLIENT,
-      clientSecret: env.GOOGLE_SECRET,
-    }),
+    // GoogleProvider({
+    //   clientId: env.GOOGLE_CLIENT,
+    //   clientSecret: env.GOOGLE_SECRET,
+    // }),
     /**
      * ...add more providers here.
      *

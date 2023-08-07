@@ -20,7 +20,6 @@ export const webhookRouter = createTRPCRouter({
   createWebhook: protectedProcedure
     .input(
       z.object({
-        accessToken: z.string().optional(),
         repository: z.string(),
         events: z.enum(["issues", "pull_request", "push", "star", ""]),
         owner: z.string(),
@@ -45,20 +44,9 @@ export const webhookRouter = createTRPCRouter({
         })
         .then((account) => account?.access_token);
 
-      // if access token on DB is stale, update it. Not doing so will cause a 401 Error: Bad Credentials
-      if (input.accessToken != undefined && input.accessToken !== accessToken) {
-        await ctx.prisma.account.update({
-          where: {
-            userId: ctx.session.user.id,
-          },
-          data: {
-            access_token: input.accessToken,
-          },
-        });
-      }
       // getting authorization using accessToken to create webhook
       const octokit = new Octokit({
-        auth: input.accessToken || accessToken,
+        auth: accessToken,
       });
 
       let hookID = "";
@@ -127,18 +115,15 @@ export const webhookRouter = createTRPCRouter({
     }),
 
   deleteWebhook: protectedProcedure
-    .input(z.object({ accessToken: z.string().optional(), hookID: z.number() }))
+    .input(
+      z.object({
+        accessToken: z.string().optional(),
+        owner: z.string(),
+        repository: z.string(),
+        hookID: z.number(),
+      })
+    )
     .mutation(async ({ ctx, input }): Promise<WebHookReturnObject> => {
-      const automation = await ctx.prisma.automation.findFirst({
-        where: {
-          webhookID: String(input.hookID),
-        },
-        select: {
-          owner: true,
-          repository: true,
-        },
-      });
-
       // grabbing DB access token
       const accessToken = await ctx.prisma.account
         .findFirst({
@@ -172,10 +157,8 @@ export const webhookRouter = createTRPCRouter({
         const response = await octokit.request(
           "DELETE /repos/{owner}/{repo}/hooks/{hook_id}",
           {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-            owner: automation?.owner!,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-            repo: automation?.repository!,
+            owner: input.owner,
+            repo: input.repository,
             hook_id: input.hookID,
             headers: {
               "X-GitHub-Api-Version": "2022-11-28",

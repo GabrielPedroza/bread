@@ -9,6 +9,11 @@ const createAutomationSchema = z.object({
   webhookID: z.string(),
   condition: z.enum(["issues", "pull_request", "push", "star", ""]),
   actionType: z.enum(["email", ""]),
+
+  // email event type
+  toEmail: z.string().optional(),
+  subject: z.string().optional(),
+  scheduleSend: z.number().optional(),
 });
 
 export const automationRouter = createTRPCRouter({
@@ -21,9 +26,9 @@ export const automationRouter = createTRPCRouter({
         data: {
           hookID: input.webhookID,
           actionType: input.actionType,
-          toEmail: "some email", // input.toEmail,
-          subject: "some subject", // input.subject,
-          content: "some content", // input.content,
+          toEmail: input.toEmail,
+          subject: input.subject,
+          scheduleSend: input.scheduleSend,
         },
       });
 
