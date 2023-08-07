@@ -63,10 +63,6 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
 
   const [owner, setOwner] = useState("");
   const [repositoryName, setRepositoryName] = useState("");
-  const [ifCondition, setIfCondition] = useState<
-    "issues" | "pull_request" | "push" | "star" | ""
-  >("");
-  const [thenCondition, setThenCondition] = useState<"email" | "">("");
 
   const [toEmail, setToEmail] = useState("");
   const [emailSubject, setEmailSubject] = useState("");
