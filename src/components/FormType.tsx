@@ -58,6 +58,11 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
   >("");
   const [thenCondition, setThenCondition] = useState<"email" | "">("");
 
+  const [emailSelected, setEmailSelected] = useState(false)
+  const [toEmail, setToEmail] = useState("")
+  const [emailSubject, setEmailSubject] = useState("")
+  const [scheduleSend, setScheduleSend] = useState(0)
+
   const [automationName, setAutomationName] = useState("");
   const [automationDescription, setAutomationDescription] = useState("");
 
@@ -79,7 +84,7 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
 
       // passing accessToken is necessary because DB access token can be stale which can cause 401: Bad Credentials
       const createWebhookResultObject = await createWebhook.mutateAsync({
-        accessToken: session.user.accessToken,
+        // accessToken: session.user.accessToken,
         repository: repositoryName,
         events: ifCondition,
         owner,
@@ -115,6 +120,9 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
             webhookID: createWebhookResultObject.data!, // this will have data guaranteed
             actionType: thenCondition,
             condition: ifCondition,
+            toEmail,
+            scheduleSend,
+            subject: emailSubject,
           });
         } catch (e) {
           toast.dismiss();
@@ -171,6 +179,7 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
     const eventValue = e.target.value;
     if (eventValue === "email") {
       setThenCondition(eventValue);
+      setEmailSelected(true)
     } else {
       setThenCondition("");
     }
@@ -263,6 +272,37 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
           {/* more options */}
         </select>
       </div>
+      {emailSelected ? (
+        <>
+          <div>
+            <input
+              type="text"
+              required
+              placeholder="Send Email To..."
+              onChange={(e) => setToEmail(e.target.value)}
+              className="w-full rounded border border-gray-300 px-3 py-2"
+            />
+          </div>
+          <div>
+            <input
+              type="text"
+              required
+              placeholder="Subject of Email..."
+              onChange={(e) => setEmailSubject(e.target.value)}
+              className="w-full rounded border border-gray-300 px-3 py-2"
+            />
+          </div>
+          <div>
+            <input
+              type="number"
+              min={0}
+              placeholder="Schedule Send in Minute(s)..."
+              onChange={(e) => setScheduleSend(Number(e.target.value))}
+              className="w-full rounded border border-gray-300 px-3 py-2"
+            />
+          </div>
+        </>
+      ) : null}
       <div>
         <label htmlFor="" className="block font-medium text-white">
           Automation:

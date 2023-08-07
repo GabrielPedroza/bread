@@ -20,7 +20,6 @@ export const webhookRouter = createTRPCRouter({
   createWebhook: protectedProcedure
     .input(
       z.object({
-        accessToken: z.string().optional(),
         repository: z.string(),
         events: z.enum(["issues", "pull_request", "push", "star", ""]),
         owner: z.string(),
@@ -45,20 +44,9 @@ export const webhookRouter = createTRPCRouter({
         })
         .then((account) => account?.access_token);
 
-      // if access token on DB is stale, update it. Not doing so will cause a 401 Error: Bad Credentials
-      if (input.accessToken != undefined && input.accessToken !== accessToken) {
-        await ctx.prisma.account.update({
-          where: {
-            userId: ctx.session.user.id,
-          },
-          data: {
-            access_token: input.accessToken,
-          },
-        });
-      }
       // getting authorization using accessToken to create webhook
       const octokit = new Octokit({
-        auth: input.accessToken || accessToken,
+        auth: accessToken,
       });
 
       let hookID = "";

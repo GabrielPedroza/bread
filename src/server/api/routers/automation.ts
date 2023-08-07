@@ -9,6 +9,11 @@ const createAutomationSchema = z.object({
   webhookID: z.string(),
   condition: z.enum(["issues", "pull_request", "push", "star", ""]),
   actionType: z.enum(["email", ""]),
+
+  // email event type
+  toEmail: z.string().optional(),
+  subject: z.string().optional(),
+  scheduleSend: z.number().optional()
 });
 
 export const automationRouter = createTRPCRouter({
@@ -17,15 +22,15 @@ export const automationRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const userID = ctx.session.user.id;
 
-      const action = await ctx.prisma.action.create({
-        data: {
-          hookID: input.webhookID,
-          actionType: input.actionType,
-          toEmail: "some email", // input.toEmail,
-          subject: "some subject", // input.subject,
-          content: "some content", // input.content,
-        },
-      });
+        const action = await ctx.prisma.action.create({
+          data: {
+            hookID: input.webhookID,
+            actionType: input.actionType,
+            toEmail: input.toEmail,
+            subject: input.subject,
+            scheduleSend: input.scheduleSend
+          },
+        });
 
       const automation = await ctx.prisma.automation.create({
         data: {

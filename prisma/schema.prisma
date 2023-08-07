@@ -102,7 +102,7 @@ model Action {
   // if actionType is email
   toEmail       String?
   subject       String?
-  content       String?
+  scheduleSend  Int?
 
   // more actionType here and below
 
