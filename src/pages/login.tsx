@@ -11,8 +11,8 @@ const Login = () => {
       </div>
       <div className="h-4/6 w-2/6 rounded-lg border-2 border-amber-950">
         <Link href="/" className="absolute mb-4 text-blue-500 underline">
-          <div className="relative bottom-20 left-36 mr-2 h-36 w-48 -rotate-[20deg] transition-all hover:scale-95">
-            <Image src={"/bread-logo.png"} alt="bread logo" fill />
+          <div className="relative bottom-20 left-36 mr-2 h-36 w-48 -rotate-[20deg] transition-all hover:scale-[175%] scale-[150%]">
+            <Image src={"/bread-logo-bg-removed.png"} alt="bread logo" fill />
           </div>
         </Link>
         <div className="relative top-40 flex flex-col justify-center">

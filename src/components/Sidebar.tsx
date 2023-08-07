@@ -12,15 +12,15 @@ const Sidebar = () => {
   return (
     <div className="relative left-3 top-5 flex h-[95%] w-[300px] flex-col border-r-2 border-amber-950">
       <div className="relative top-5 flex">
-        <div className="relative bottom-2 left-6 mr-2 h-16 w-24 -rotate-[20deg]">
-          <Image src={"/bread-logo.png"} alt="bread logo" fill priority />
+        <div className="relative bottom-2 left-6 mr-2 h-16 w-24 -rotate-[20deg] scale-[200%]">
+          <Image src={"/bread-logo-bg-removed.png"} alt="bread logo" fill priority />
         </div>
         <h3 className="absolute right-16 top-3 font-greatvibes text-3xl text-amber-950">
           Bread
         </h3>
       </div>
       <br />
-      <div className="text-center">
+      <div className="text-center z-10">
         <button
           onClick={() => {
             setCreateModalState({ open: true });
