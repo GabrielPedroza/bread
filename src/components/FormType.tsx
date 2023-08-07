@@ -58,10 +58,10 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
   >("");
   const [thenCondition, setThenCondition] = useState<"email" | "">("");
 
-  const [emailSelected, setEmailSelected] = useState(false)
-  const [toEmail, setToEmail] = useState("")
-  const [emailSubject, setEmailSubject] = useState("")
-  const [scheduleSend, setScheduleSend] = useState(0)
+  const [emailSelected, setEmailSelected] = useState(false);
+  const [toEmail, setToEmail] = useState("");
+  const [emailSubject, setEmailSubject] = useState("");
+  const [scheduleSend, setScheduleSend] = useState(0);
 
   const [automationName, setAutomationName] = useState("");
   const [automationDescription, setAutomationDescription] = useState("");
@@ -179,7 +179,7 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
     const eventValue = e.target.value;
     if (eventValue === "email") {
       setThenCondition(eventValue);
-      setEmailSelected(true)
+      setEmailSelected(true);
     } else {
       setThenCondition("");
     }

@@ -1,8 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as crypto from "crypto";
 import { env } from "~/env.mjs";
-import { type AutomationAndActionByWebHookIDType, sendEmail } from "~/utils/sendEmail";
-import { PrismaClient } from '@prisma/client';
+import {
+  type AutomationAndActionByWebHookIDType,
+  sendEmail,
+} from "~/utils/sendEmail";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -28,9 +31,9 @@ export default async function webhooksHandler(
   const deliveryId = req.headers["x-github-delivery"];
 
   // eventType is guaranteed to be a string because with how ruleset form is set up, it only listens to one event. it will never be undefined
-  const eventType = req.headers["x-github-event"] as string
+  const eventType = req.headers["x-github-event"] as string;
   // GitHubWebHookID is guaranteed to be a string because the hook is tied to one event (even when multiple hooks are in one repo). it will never be undefined
-  const GitHubWebHookID = req.headers["x-github-hook-id"] as string
+  const GitHubWebHookID = req.headers["x-github-hook-id"] as string;
 
   // checks for duplicate webhooks
   if (receivedDeliveryIds.has(deliveryId)) {
@@ -45,10 +48,16 @@ export default async function webhooksHandler(
   }
 
   if (req.method === "POST") {
-    const automationAndActionByWebHookID = await fetchUserAutomationByHookID(GitHubWebHookID)
+    const automationAndActionByWebHookID = await fetchUserAutomationByHookID(
+      GitHubWebHookID
+    );
     if (automationAndActionByWebHookID?.action.actionType === "email") {
       // Action model in DB is denormalized which makes toEmail, subject, etc... optional. If actionType is email, the toEmail, subject, etc... are not null/undefined
-      sendEmail(automationAndActionByWebHookID as AutomationAndActionByWebHookIDType, req.body, eventType);
+      sendEmail(
+        automationAndActionByWebHookID as AutomationAndActionByWebHookIDType,
+        req.body,
+        eventType
+      );
     }
     res.status(200).send("Webhook received successfully");
 
@@ -64,7 +73,7 @@ async function fetchUserAutomationByHookID(WebhookID: string) {
   try {
     const userAutomation = await prisma.automation.findFirst({
       where: {
-        webhookID: WebhookID
+        webhookID: WebhookID,
       },
       select: {
         action: {
@@ -72,12 +81,12 @@ async function fetchUserAutomationByHookID(WebhookID: string) {
             toEmail: true,
             subject: true,
             actionType: true,
-            scheduleSend: true
-          }
-        }
-      }
+            scheduleSend: true,
+          },
+        },
+      },
     });
-    return userAutomation
+    return userAutomation;
   } finally {
     await prisma.$disconnect();
   }

@@ -30,6 +30,8 @@ const UserAutomations = () => {
       const deleteWebHookResultObject = await deleteWebHook.mutateAsync({
         hookID: Number(automation.webhookID),
         accessToken: session?.user.accessToken,
+        owner: automation.owner,
+        repository: automation.repository,
       });
 
       if (deleteWebHookResultObject.error) {
