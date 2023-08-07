@@ -30,8 +30,10 @@ export default async function webhooksHandler(
 
   const deliveryId = req.headers["x-github-delivery"];
 
+  type eventActionType = "push" | "issues" | "pull_request" | "star" | "ping"
+
   // eventType is guaranteed to be a string because with how ruleset form is set up, it only listens to one event. it will never be undefined
-  const eventType = req.headers["x-github-event"] as string;
+  const eventType = req.headers["x-github-event"] as eventActionType;
   // GitHubWebHookID is guaranteed to be a string because the hook is tied to one event (even when multiple hooks are in one repo). it will never be undefined
   const GitHubWebHookID = req.headers["x-github-hook-id"] as string;
 
