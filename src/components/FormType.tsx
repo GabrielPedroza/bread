@@ -51,6 +51,8 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
     GitHubRulesetFormEventActionType,
     setRepositoryEventSelected,
     setEmailSelected,
+    setRulesetFormIfCondition,
+    setRulesetFormThenAction
   } = useContext(ModalContext);
   const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
@@ -93,7 +95,7 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
       const createWebhookResultObject = await createWebhook.mutateAsync({
         // accessToken: session.user.accessToken,
         repository: repositoryName,
-        events: ifCondition,
+        events: rulesetFormIfCondition,
         owner,
       });
 
@@ -125,8 +127,8 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
             repository: repositoryName,
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             webhookID: createWebhookResultObject.data!, // this will have data guaranteed
-            actionType: thenCondition,
-            condition: ifCondition,
+            actionType: rulesetFormThenAction,
+            condition: rulesetFormIfCondition,
             toEmail,
             scheduleSend,
             subject: emailSubject,
@@ -176,19 +178,19 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
       eventValue === "push" ||
       eventValue === "star"
     ) {
-      setIfCondition(eventValue);
+      setRulesetFormIfCondition(eventValue);
     } else {
-      setIfCondition("");
+      setRulesetFormIfCondition("");
     }
   };
 
   const handleSetThenCondition = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const eventValue = e.target.value;
     if (eventValue === "email") {
-      setThenCondition(eventValue);
+      setRulesetFormThenAction(eventValue);
       setEmailSelected(true);
     } else {
-      setThenCondition("");
+      setRulesetFormThenAction("");
     }
   };
 
