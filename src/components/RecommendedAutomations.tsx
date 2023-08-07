@@ -12,21 +12,32 @@ type AutomationType = {
   type: EventName;
   ifThis: string;
   thenThat: string;
-  ifThisEvent: ("issue" | "pull_request" | "star" | "push")[]; // an array of any of these combinations
+  ifThisEvent: "issues" | "pull_request" | "star" | "push";
   thenThatEvent: "email";
 };
 
 type AutomationsType = AutomationType[];
 
 const RecommendedAutomations = () => {
-  const { isCollapsed, setIsCollapsed } = useContext(ModalContext);
+  const {
+    isCollapsed,
+    setIsCollapsed,
+    setRulesetModalState,
+    setCreateModalState,
+    setEventTriggerState,
+    setGitHubRulesetFormEventActionType,
+    setRepositoryEventSelected,
+    setEmailSelected,
+    setRulesetFormThenAction,
+    setRulesetFormIfCondition,
+  } = useContext(ModalContext);
   const automationRecommendations: AutomationsType = [
     {
       id: 1,
       type: EventName.Repository,
-      ifThis: "Issue or PR created on repo",
+      ifThis: "Issue created on repo",
       thenThat: "Email me with more info",
-      ifThisEvent: ["issue", "pull_request"],
+      ifThisEvent: "issues",
       thenThatEvent: "email",
     },
     {
@@ -34,7 +45,7 @@ const RecommendedAutomations = () => {
       type: EventName.Repository,
       ifThis: "Someone stars on repo",
       thenThat: "Email me about the user",
-      ifThisEvent: ["star"],
+      ifThisEvent: "star",
       thenThatEvent: "email",
     },
     {
@@ -42,10 +53,22 @@ const RecommendedAutomations = () => {
       type: EventName.Repository,
       ifThis: "Someone pushes code on repo",
       thenThat: "Email me on the code merged",
-      ifThisEvent: ["push"],
+      ifThisEvent: "push",
       thenThatEvent: "email",
     },
   ];
+
+  const handleRecommendedAutomationClick = (automation: AutomationType) => {
+    setCreateModalState({ open: true });
+    setRulesetModalState({ open: true });
+    setEventTriggerState("github");
+    setRepositoryEventSelected(true);
+    setGitHubRulesetFormEventActionType(automation.type);
+    setEmailSelected(true);
+    setRulesetFormThenAction("email");
+    setRulesetFormIfCondition(automation.ifThisEvent);
+  };
+
   return (
     <div
       className={`mx-auto  -mt-7 w-11/12 rounded-lg border-2 border-amber-950 transition-all ${
@@ -70,6 +93,7 @@ const RecommendedAutomations = () => {
           <div
             key={i}
             className="h-[100%] w-[31%] cursor-pointer rounded-lg border-4 border-orange-900 p-4 text-center text-2xl text-amber-950 transition-all hover:scale-[102%]"
+            onClick={() => handleRecommendedAutomationClick(automation)}
           >
             <h3 className="mt-14">{automation.ifThis}</h3>
             <HiOutlineArrowNarrowDown className="mx-auto my-2" />

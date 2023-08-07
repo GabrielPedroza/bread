@@ -43,6 +43,17 @@ const CalendarFormType = () => (
 );
 const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
   const { setCreateModalState, setRulesetModalState } = modals;
+  const {
+    repositoryEventSelected,
+    emailSelected,
+    rulesetFormIfCondition,
+    rulesetFormThenAction,
+    GitHubRulesetFormEventActionType,
+    setRepositoryEventSelected,
+    setEmailSelected,
+    setRulesetFormIfCondition,
+    setRulesetFormThenAction,
+  } = useContext(ModalContext);
   const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
 
@@ -51,14 +62,8 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
   const userAutomations = api.automation.getUserAutomations.useQuery();
 
   const [owner, setOwner] = useState("");
-  const [repositoryEventSelected, setRepositoryEventSelected] = useState(false);
   const [repositoryName, setRepositoryName] = useState("");
-  const [ifCondition, setIfCondition] = useState<
-    "issues" | "pull_request" | "push" | "star" | ""
-  >("");
-  const [thenCondition, setThenCondition] = useState<"email" | "">("");
 
-  const [emailSelected, setEmailSelected] = useState(false);
   const [toEmail, setToEmail] = useState("");
   const [emailSubject, setEmailSubject] = useState("");
   const [scheduleSend, setScheduleSend] = useState(0);
@@ -86,7 +91,7 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
       const createWebhookResultObject = await createWebhook.mutateAsync({
         // accessToken: session.user.accessToken,
         repository: repositoryName,
-        events: ifCondition,
+        events: rulesetFormIfCondition,
         owner,
       });
 
@@ -118,8 +123,8 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
             repository: repositoryName,
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             webhookID: createWebhookResultObject.data!, // this will have data guaranteed
-            actionType: thenCondition,
-            condition: ifCondition,
+            actionType: rulesetFormThenAction,
+            condition: rulesetFormIfCondition,
             toEmail,
             scheduleSend,
             subject: emailSubject,
@@ -169,19 +174,19 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
       eventValue === "push" ||
       eventValue === "star"
     ) {
-      setIfCondition(eventValue);
+      setRulesetFormIfCondition(eventValue);
     } else {
-      setIfCondition("");
+      setRulesetFormIfCondition("");
     }
   };
 
   const handleSetThenCondition = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const eventValue = e.target.value;
     if (eventValue === "email") {
-      setThenCondition(eventValue);
+      setRulesetFormThenAction(eventValue);
       setEmailSelected(true);
     } else {
-      setThenCondition("");
+      setRulesetFormThenAction("");
     }
   };
 
@@ -203,6 +208,7 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
           className="w-full rounded border border-gray-300 px-3 py-2"
           required
           onChange={(e) => handleEventTypeChange(e)}
+          defaultValue={GitHubRulesetFormEventActionType}
         >
           <option value="" disabled selected>
             Select event trigger here...
@@ -243,6 +249,7 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
           className="w-full rounded border border-gray-300 px-3 py-2"
           required
           onChange={(e) => handleSetIfCondition(e)}
+          defaultValue={rulesetFormIfCondition}
         >
           <option value="" disabled selected>
             Condition...
@@ -264,8 +271,9 @@ const GitHubFormType = ({ modals }: GitHubFormTypeProps) => {
           className="w-full rounded border border-gray-300 px-3 py-2"
           required
           onChange={(e) => handleSetThenCondition(e)}
+          defaultValue={rulesetFormThenAction}
         >
-          <option value="condition2" disabled selected>
+          <option value="" disabled selected>
             Notify Me By...
           </option>
           <option value="email">Email me with more information</option>
