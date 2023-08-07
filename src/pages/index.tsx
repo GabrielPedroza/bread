@@ -17,10 +17,10 @@ export default function Home() {
         <h1 className="relative right-48 top-12 font-greatvibes text-8xl text-amber-950">
           Bread
         </h1>
-        <div className="relative bottom-[20rem] left-16 h-[900px] w-[1200px] -rotate-[15deg] opacity-90">
+        <div className="relative bottom-[20rem] left-16 h-[900px] w-[1200px] -rotate-[15deg] opacity-90 scale-[200%]">
           <Image
             priority
-            src={"/bread-logo.png"}
+            src={"/bread-logo-bg-removed.png"}
             alt="Bread logo"
             fill
             draggable="false"

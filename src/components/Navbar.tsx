@@ -3,9 +3,9 @@ import Link from "next/link";
 
 const Navbar = () => {
   return (
-    <nav className="relative -top-4 flex items-center justify-between p-4">
-      <div className="relative mr-2 h-24 w-36 -rotate-[20deg]">
-        <Image src={"/bread-logo.png"} alt="" fill priority />
+    <nav className="relative -top-4 flex items-center justify-between p-4 z-50">
+      <div className="relative mr-2 h-24 w-36 -rotate-[20deg] scale-[200%]">
+        <Image src={"/bread-logo-bg-removed.png"} alt="" fill priority />
       </div>
       <div className="flex">
         <Link href={"/login"}>
