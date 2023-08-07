@@ -4,12 +4,24 @@ import FormType from "./FormType";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const RulesetAutomationModal = () => {
-  const { setCreateModalState, setRulesetModalState } =
-    useContext(ModalContext);
+  const {
+    setCreateModalState,
+    setRulesetModalState,
+    setGitHubRulesetFormEventActionType,
+    setRepositoryEventSelected,
+    setEmailSelected,
+    setRulesetFormThenAction,
+    setRulesetFormIfCondition,
+  } = useContext(ModalContext);
 
   const handleClose = () => {
     setCreateModalState({ open: false });
     setRulesetModalState({ open: false });
+    setGitHubRulesetFormEventActionType("");
+    setRepositoryEventSelected(false);
+    setEmailSelected(false);
+    setRulesetFormThenAction("");
+    setRulesetFormIfCondition("");
   };
 
   return (
